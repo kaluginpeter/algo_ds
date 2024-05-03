@@ -98,6 +98,7 @@ class SingleLinkedList:
     def length(self) -> int:
         """
         Returning length of linked list.
+        Time complexity O(1).
         Example usages:
         ll1 = SingleLinkedList()
         ll1.length()
@@ -109,6 +110,7 @@ class SingleLinkedList:
         """
         Returning length of liked list.
         Use this for python builtin len() method.
+        Time complexity O(1).
         Example of usages:
         ll1 = SingleLinkedList()
         len(ll1)
@@ -324,6 +326,7 @@ class SingleLinkedList:
     def clear(self) -> None:
         """
         Clear all elements in linked list.
+        Time complexity O(1).
         Example of usages:
         ll1 = SingleLinkedList()
         for i in range(10):
