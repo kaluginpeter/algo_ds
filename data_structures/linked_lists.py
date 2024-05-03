@@ -49,7 +49,7 @@ class SingleLinkedList:
     ll1.all_methods()
     """
     def __init__(self, head: Node | None = None):
-        self.head = head
+        self.head: Node | None = head
         self.size: int = 0
 
     def __str__(self) -> str:
@@ -77,12 +77,14 @@ class SingleLinkedList:
     def append(self, x: any) -> None:
         """
         Appending given param x to the end of linked list.
-        x - any type of class, exclude NoneType.
+        x - any type of class.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        for i in range(4):
+            ll1.append(i)
         :param x:
         :return None:
         """
-        if x is None:
-            raise ValueError("You can't appending None in list")
 
         if self.is_empty():
             self.head = Node(data=x)
@@ -268,7 +270,7 @@ class SingleLinkedList:
             self.size -= 1
             return val
         tmp: Node = self.head
-        while tmp.next.next:
+        while tmp.next:
             if tmp.next is x:
                 val: Node = tmp.next
                 tmp.next = tmp.next.next
@@ -334,3 +336,113 @@ class SingleLinkedList:
         """
         self.head = None
         self.size = 0
+
+
+# TODO DoubleLinkedList, CircularLinkedList
+class DoubleLinkedList:
+    """
+    Implementation of Double Linked List.
+    To see all available methods call all_methods method.
+    Example of usages:
+    dll1 = DoubleLinkedList()
+    ddl1.all_methods()
+    """
+    def __init__(self, head: DoubleNode | None = None):
+        self.head: DoubleNode | None = head
+        self.tail: DoubleNode | None = self.head
+        self.size: int = 0
+
+    def __str__(self) -> str:
+        """
+        Returning string representation of double linked list in follow way:
+        None<->Value_of_Node<->Value_of_Node<->...<->None
+        :return str
+        """
+        if self.is_empty():
+            return 'None'
+        output: list[str] = ['None']
+        tmp: DoubleNode = self.head
+        while tmp:
+            output.append(str(tmp))
+            tmp = tmp.next
+        output.append('None')
+        return '<->'.join(output)
+
+    def all_methods(self) -> list[str]:
+        """
+        Returning list name of all available methods.
+        :return list of strings:
+        """
+        return dir(DoubleLinkedList)
+
+    def append(self, x: any) -> None:
+        """
+        Appending given param x to the end of double linked list.
+        x - any type of class.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(3):
+            dll1.append(i)
+        :param x:
+        :return None:
+        """
+        if self.is_empty():
+            self.head = DoubleNode(data=x, prev=None, next=None)
+            self.size += 1
+            self.tail = self.head
+            return
+        self.tail.next = DoubleNode(data=x, prev=self.tail)
+        self.tail = self.tail.next
+        self.size += 1
+
+    def prepend(self, x: any) -> None:
+        """
+        Appending given element to the head of double linked list.
+        Exmaple of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(2):
+            dll1.prepend(i)
+        :param x:
+        :return None:
+        """
+        if self.is_empty():
+            self.head = DoubleNode(data=x)
+            self.tail = self.head
+            self.size += 1
+            return
+        self.head.prev = DoubleNode(data=x, next=self.head)
+        self.head = self.head.prev
+        self.size += 1
+
+    def length(self) -> int:
+        """
+        Returning length of double linked list.
+        Time complexity O(1).
+        Example usages:
+        dll1 = DoubleLinkedList()
+        dll1.length()
+        :return int - length of double linked list:
+        """
+        return self.size
+
+    def __len__(self) -> int:
+        """
+        Returning length of double liked list.
+        Use this for python builtin len() method.
+        Time complexity O(1).
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        len(dll1)
+        :return int - length of double linked list:
+        """
+        return self.length()
+
+    def is_empty(self) -> bool:
+        """
+        Return true if double linked list is empty, otherwise return False
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        dll1.is_empty()
+        :return boolean type True or False:
+        """
+        return self.length() == 0
