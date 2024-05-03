@@ -84,7 +84,7 @@ class SingleLinkedList:
         if x is None:
             raise ValueError("You can't appending None in list")
 
-        if self.length() == 0:
+        if self.is_empty():
             self.head = Node(data=x)
             self.size += 1
             return
@@ -136,7 +136,7 @@ class SingleLinkedList:
         """
         if x is None:
             raise ValueError("Linked list can't contain NoneType objects")
-        if self.length() == 0:
+        if self.is_empty():
             return False
         tmp: Node = self.head
         while tmp:
@@ -172,7 +172,7 @@ class SingleLinkedList:
         """
         if not isinstance(x, Node):
             raise ValueError(f"{type(x)} should be Node instance")
-        if self.length() == 0:
+        if self.is_empty():
             return False
         tmp: Node = self.head
         while tmp:
@@ -274,6 +274,7 @@ class SingleLinkedList:
                 tmp.next = tmp.next.next
                 self.size -= 1
                 return val
+            tmp = tmp.next
 
     def remove_at(self, x: int) -> Node:
         """
@@ -294,13 +295,10 @@ class SingleLinkedList:
             return self.remove_node(self.head)
         idx: int = 1
         tmp: Node = self.head
-        while idx < x - 1:
+        while idx < x:
             idx += 1
             tmp = tmp.next
-        val: Node = tmp.next
-        tmp.next = tmp.next.next
-        self.size -= 1
-        return val
+        return self.remove_node(tmp)
 
     def reverse(self) -> None:
         """
