@@ -137,7 +137,7 @@ class SingleLinkedList:
         if self.length() == 0:
             return False
         tmp: Node = self.head
-        while tmp.next:
+        while tmp:
             if tmp.data == x:
                 return True
             tmp = tmp.next
@@ -173,7 +173,7 @@ class SingleLinkedList:
         if self.length() == 0:
             return False
         tmp: Node = self.head
-        while tmp.next:
+        while tmp:
             if tmp is x:
                 return True
             tmp = tmp.next
@@ -203,3 +203,133 @@ class SingleLinkedList:
         tmp.next = None
         self.size -= 1
         return val
+
+    def remove(self, x: any) -> Node:
+        """
+        Remove first occurrences of given element/Node and return it Node instance.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        x = Node(data=5)
+        ll1.append(x.data)
+        ll1.remove(x.data)
+        :param x:
+        :return Instance of Node class:
+        """
+        if self.is_empty():
+            raise ValueError("Can't remove from empty linked list")
+        if isinstance(x, Node):
+            return self.remove_node(x)
+        if not self.contains(x):
+            raise ValueError(f"Element {x} not in linked list")
+        if self.length() == 1:
+            val: Node = self.head
+            self.head = None
+            self.size -= 1
+            return val
+        if self.head.data == x:
+            val: Node = self.head
+            self.head = self.head.next
+            self.size -= 1
+            return val
+        tmp: Node = self.head
+        while tmp.next:
+            if tmp.next.data == x:
+                val: Node = tmp.next
+                tmp.next = tmp.next.next
+                self.size -= 1
+                return val
+            tmp = tmp.next
+
+    def remove_node(self, x: Node) -> Node:
+        """
+        Remove given Node instance from linked list and return it.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        x = Node(data=1)
+        ll1.append(x.data)
+        ll1.remove_node(x)
+        :param x:
+        :return Instance of Node class:
+        """
+        if self.is_empty():
+            raise ValueError("Can't remove from empty linked list")
+        if not self.contains_node(x):
+            raise ValueError(f"Node {x} not in linked list")
+        if self.length() == 1:
+            val: Node = self.head
+            self.head = None
+            self.size -= 1
+            return val
+        if self.head is x:
+            val: Node = self.head
+            self.head = self.head.next
+            self.size -= 1
+            return val
+        tmp: Node = self.head
+        while tmp.next.next:
+            if tmp.next is x:
+                val: Node = tmp.next
+                tmp.next = tmp.next.next
+                self.size -= 1
+                return val
+
+    def remove_at(self, x: int) -> Node:
+        """
+        Removing Node at given position. Indexing of linked list starts with 1.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        for i in range(10):
+            ll1.append(i)
+        ll1.remove_at(10)
+        :param x:
+        :return Instance of Node class:
+        """
+        if self.is_empty():
+            raise ValueError("Can't remove from empty linked list")
+        if not 1 <= x <= self.length():
+            raise IndexError(f"Linked list index= {x} out of range")
+        if self.length() == 1 or x == 1:
+            return self.remove_node(self.head)
+        idx: int = 1
+        tmp: Node = self.head
+        while idx < x - 1:
+            idx += 1
+            tmp = tmp.next
+        val: Node = tmp.next
+        tmp.next = tmp.next.next
+        self.size -= 1
+        return val
+
+    def reverse(self) -> None:
+        """
+        Reversing linked list. Time Complexity is O(N) and Memory Complexity is O(1).
+        Example of usages:
+        ll1 = SingleLinkedList()
+        for i in range(5):
+            ll1.append(i)
+        ll1.reverse()
+        :return None:
+        """
+        if self.is_empty():
+            raise ValueError("Can't reverse empty linked list")
+        prev: Node | None = None
+        current: Node = self.head
+        while current:
+            nxt: Node = current.next
+            current.next = prev
+            prev = current
+            current = nxt
+        self.head = prev
+
+    def clear(self) -> None:
+        """
+        Clear all elements in linked list.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        for i in range(10):
+            ll1.append(i)
+        ll1.clear()
+        :return None:
+        """
+        self.head = None
+        self.size = 0
