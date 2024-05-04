@@ -69,7 +69,10 @@ class SingleLinkedList:
 
     def all_methods(self) -> list[str]:
         """
-        Returning list of names all available methods
+        Returning list names of all available methods.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        ll1.all_methods()
         :return list of strings:
         """
         return dir(SingleLinkedList)
@@ -386,7 +389,6 @@ class SingleLinkedList:
         self.size = 0
 
 
-# TODO DoubleLinkedList, CircularLinkedList
 class DoubleLinkedList:
     """
     Implementation of Double Linked List.
@@ -418,7 +420,10 @@ class DoubleLinkedList:
 
     def all_methods(self) -> list[str]:
         """
-        Returning list name of all available methods.
+        Returning list names of all available methods.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        dll1.all_methods()
         :return list of strings:
         """
         return dir(DoubleLinkedList)
@@ -805,4 +810,116 @@ class DoubleLinkedList:
         """
         self.head = None
         self.tail = self.head
+        self.size = 0
+
+
+# TODO CircularLinkedList implementation
+class CircularLinkedList:
+    """
+    Implementation of circular linked list.
+    To see all available methods use all_methods method.
+    Example of usages:
+    cll1 = CircularLinkedList()
+    cll1.all_methods()
+    """
+    def __init__(self, head: Node | None = None):
+        self.head: Node | None = head
+        self.tail: Node | None = self.head
+        self.size: int = 0
+
+    def __str__(self) -> str:
+        """
+        Returning string representation on linked list in follow type:
+        Value_of_Node->Next_value_of_Node...->None
+        """
+        if self.size == 0:
+            return 'None'
+        output: list[str] = list()
+        tmp: Node = self.head
+        while tmp is not self.tail:
+            output.append(str(tmp))
+            tmp = tmp.next
+        output.append(str(self.tail))
+        output.append('None')
+        return '->'.join(output)
+
+    def all_methods(self) -> list[str]:
+        """
+        Returning list names of all available methods.
+        Example of usages:
+        cll1 = CircularLinkedList()
+        cll1.all_methods()
+        :return list of strings:
+        """
+        return dir(CircularLinkedList)
+
+    def append(self, x: any) -> None:
+        """
+        Appending given param x to the end(in tail) of linked list.
+        x - any type of class.
+        Example of usages:
+        cll1 = CircularLinkedList()
+        for i in range(4):
+            cll1.append(i)
+        :param x:
+        :return None:
+        """
+
+        if self.is_empty():
+            self.head = Node(data=x)
+            self.tail = self.head
+            self.tail.next = self.head
+            self.size += 1
+            return
+
+        self.tail.next = Node(data=x)
+        self.tail = self.tail.next
+        self.tail.next = self.head
+        self.size += 1
+
+    def length(self) -> int:
+        """
+        Returning length of linked list.
+        Time complexity O(1).
+        Example usages:
+        cll1 = CircularLinkedList()
+        cll1.length()
+        :return length of linked list:
+        """
+        return self.size
+
+    def __len__(self) -> int:
+        """
+        Returning length of liked list.
+        Use this for python builtin len() method.
+        Time complexity O(1).
+        Example of usages:
+        cll1 = CircularLinkedList()
+        len(cll1)
+        :return length of linked list:
+        """
+        return self.length()
+
+    def is_empty(self) -> bool:
+        """
+        Return true if linked list is empty, otherwise return False
+        Example of usages:
+        cll1 = CircularLinkedList()
+        cll1.is_empty()
+        :return boolean type True or False:
+        """
+        return self.length() == 0
+
+    def clear(self) -> None:
+        """
+        Clear all elements in linked list.
+        Time complexity O(1).
+        Example of usages:
+        cll1 = CircularLinkedList()
+        for i in range(10):
+            cll1.append(i)
+        cll1.clear()
+        :return None:
+        """
+        self.head = None
         self.size = 0
