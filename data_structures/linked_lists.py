@@ -97,6 +97,48 @@ class SingleLinkedList:
         tmp.next = Node(data=x)
         self.size += 1
 
+    def insert(self, pos: int, x: any) -> None:
+        """
+        Insert element at given index in list. List indexing starts with 0.
+        Index may be negative.
+        First param is index, second - element.
+        Example of usages:
+        ll1 = SingleLinkedList()
+        ll1.insert(0, 1)
+        :param pos:
+        :param x:
+        :return None:
+        """
+        if self.is_empty():
+            self.head = Node(data=x)
+            self.size += 1
+            return
+
+        is_negative_position: bool = pos < 0
+        if pos == 0 or (is_negative_position and abs(pos) >= self.length()):
+            self.head = Node(data=x, next=self.head)
+            self.size += 1
+            return
+
+        elif pos >= self.length():
+            tmp: Node = self.head
+            while tmp.next:
+                tmp = tmp.next
+            tmp.next = Node(data=x)
+            self.size += 1
+            return
+
+        if is_negative_position:
+            pos = self.length() - abs(pos)
+
+        idx: int = 0
+        tmp: Node = self.head
+        while idx < pos - 1:
+            idx += 1
+            tmp = tmp.next
+        tmp.next = Node(data=x, next=tmp.next)
+        self.size += 1
+
     def length(self) -> int:
         """
         Returning length of linked list.
@@ -420,6 +462,51 @@ class DoubleLinkedList:
         self.head = self.head.prev
         self.size += 1
 
+    def insert(self, pos: int, x: any) -> None:
+        """
+        Insert element at given index in list. List indexing starts with 0.
+        Index may be negative.
+        First param is index, second - element.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        dll1.insert(0, 1)
+        :param pos:
+        :param x:
+        :return None:
+        """
+        if self.is_empty():
+            self.head = DoubleNode(data=x)
+            self.size += 1
+            self.tail = self.head
+            return
+
+        is_negative_position: bool = pos < 0
+        if pos == 0 or (is_negative_position and abs(pos) >= self.length()):
+            new: DoubleNode = DoubleNode(data=x, next=self.head)
+            self.head.prev = new
+            self.head = new
+            self.size += 1
+            return
+
+        elif pos >= self.length():
+            self.tail.next = DoubleNode(data=x, prev=self.tail,)
+            self.tail = self.tail.next
+            self.size += 1
+            return
+
+        if is_negative_position:
+            pos = self.length() - abs(pos)
+
+        idx: int = 0
+        tmp: DoubleNode = self.head
+        while idx < pos:
+            idx += 1
+            tmp = tmp.next
+        new: DoubleNode = DoubleNode(data=x, prev=tmp.prev, next=tmp)
+        tmp.prev.next = new
+        tmp.prev = new
+        self.size += 1
+
     def length(self) -> int:
         """
         Returning length of double linked list.
@@ -719,4 +806,3 @@ class DoubleLinkedList:
         self.head = None
         self.tail = self.head
         self.size = 0
-# TODO complete insert at in SingleLinkedList and DoubleLinkedList
