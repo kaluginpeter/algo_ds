@@ -877,6 +877,49 @@ class CircularLinkedList:
         self.tail.next = self.head
         self.size += 1
 
+    def insert(self, pos: int, x: any) -> None:
+        """
+        Insert element at given index in list. List indexing starts with 0.
+        Index may be negative.
+        First param is index, second - element.
+        Example of usages:
+        cll1 = CircularLinkedList()
+        cll1.insert(0, 1)
+        :param pos:
+        :param x:
+        :return None:
+        """
+        if self.is_empty():
+            self.head = Node(data=x)
+            self.tail = self.head
+            self.tail.next = self.head
+            self.size += 1
+            return
+
+        is_negative_position: bool = pos < 0
+        if pos == 0 or (is_negative_position and abs(pos) >= self.length()):
+            self.head = Node(data=x, next=self.head)
+            self.tail.next = self.head
+            self.size += 1
+            return
+
+        elif pos >= self.length():
+            self.tail.next = Node(data=x, next=self.head)
+            self.tail = self.tail.next
+            self.size += 1
+            return
+
+        if is_negative_position:
+            pos = self.length() - abs(pos)
+
+        idx: int = 0
+        tmp: Node = self.head
+        while idx < pos - 1:
+            idx += 1
+            tmp = tmp.next
+        tmp.next = Node(data=x, next=tmp.next)
+        self.size += 1
+
     def length(self) -> int:
         """
         Returning length of linked list.
