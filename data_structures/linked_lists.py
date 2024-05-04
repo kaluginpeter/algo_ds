@@ -132,17 +132,23 @@ class SingleLinkedList:
 
     def contains(self, x: any) -> bool:
         """
-        Returning true if element exists in linked list, otherwise return false
+        Returning true if element or Node exists in linked list nodes data, otherwise return false
+        Example of usages:
+        ll1 = SingleLinkedList()
+        for i in range(4):
+            ll1.append(i)
+        x = ll1.head
+        ll1.contains(x) or ll1.contains(0)
         :param x:
         :return boolean type of True and False:
         """
-        if x is None:
-            raise ValueError("Linked list can't contain NoneType objects")
+        if isinstance(x, Node) and self.contains_node(x):
+            return self.contains_node(x)
         if self.is_empty():
             return False
         tmp: Node = self.head
         while tmp:
-            if tmp.data == x:
+            if tmp.data == x or tmp.data is x:
                 return True
             tmp = tmp.next
         return False
@@ -158,13 +164,13 @@ class SingleLinkedList:
         :param x:
         :return boolean type of True and False:
         """
-        if isinstance(x, Node):
+        if isinstance(x, Node) and self.contains_node(x):
             return self.contains_node(x)
         return self.contains(x)
 
     def contains_node(self, x: Node) -> bool:
         """
-        Returning True if given Node exists in linked list, otherwise return False.
+        Returning True if given Node exists in linked list nodes, otherwise return False.
         Example of usages:
         ll1 = SingleLinkedList()
         x = Node(data=5)
@@ -191,10 +197,10 @@ class SingleLinkedList:
         ll1 = SingleLinkedList()
         ll1.append(1)
         ll1.pop()
-        :return object of Node instance:
+        :return data of object Node instance:
         """
         if self.is_empty():
-            raise ValueError("Can't delete from empty linked list")
+            raise IndexError("Can't delete from empty linked list")
         if self.length() == 1:
             val: Node = self.head
             self.head = None
@@ -210,18 +216,18 @@ class SingleLinkedList:
 
     def remove(self, x: any) -> Node:
         """
-        Remove first occurrences of given element/Node and return it Node instance.
+        Remove first occurrences of given element/Node in list nodes data and return it Node instance.
         Example of usages:
         ll1 = SingleLinkedList()
         x = Node(data=5)
         ll1.append(x.data)
         ll1.remove(x.data)
         :param x:
-        :return Instance of Node class:
+        :return data of instance Node class:
         """
         if self.is_empty():
-            raise ValueError("Can't remove from empty linked list")
-        if isinstance(x, Node):
+            raise IndexError("Can't remove from empty linked list")
+        if isinstance(x, Node) and self.contains_node(x):
             return self.remove_node(x)
         if not self.contains(x):
             raise ValueError(f"Element {x} not in linked list")
@@ -230,18 +236,18 @@ class SingleLinkedList:
             self.head = None
             self.size -= 1
             return val
-        if self.head.data == x:
+        if self.head.data == x or self.head.data is x:
             val: Node = self.head
             self.head = self.head.next
             self.size -= 1
-            return val
+            return val.data
         tmp: Node = self.head
         while tmp.next:
-            if tmp.next.data == x:
+            if tmp.next.data == x or tmp.next.data is x:
                 val: Node = tmp.next
                 tmp.next = tmp.next.next
                 self.size -= 1
-                return val
+                return val.data
             tmp = tmp.next
 
     def remove_node(self, x: Node) -> Node:
@@ -256,7 +262,7 @@ class SingleLinkedList:
         :return Instance of Node class:
         """
         if self.is_empty():
-            raise ValueError("Can't remove from empty linked list")
+            raise IndexError("Can't remove from empty linked list")
         if not self.contains_node(x):
             raise ValueError(f"Node {x} not in linked list")
         if self.length() == 1:
@@ -290,7 +296,7 @@ class SingleLinkedList:
         :return Instance of Node class:
         """
         if self.is_empty():
-            raise ValueError("Can't remove from empty linked list")
+            raise IndexError("Can't remove from empty linked list")
         if not 1 <= x <= self.length():
             raise IndexError(f"Linked list index= {x} out of range")
         if self.length() == 1 or x == 1:
@@ -446,3 +452,271 @@ class DoubleLinkedList:
         :return boolean type True or False:
         """
         return self.length() == 0
+
+    def contains(self, x: any) -> bool:
+        """
+        Return true if element or DoubleNode instance exist in linked list nodes data.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(1, 11):
+            dll1.append(i)
+        x = dll1.head
+        dll1.contains(x) or dll1.contains(1)
+        :param x:
+        :return Boolean type of True and False:
+        """
+        if isinstance(x, DoubleNode) and self.contains_node(x):
+            return self.contains_node(x)
+        if self.is_empty():
+            return False
+        tmp: DoubleNode = self.head
+        while tmp:
+            if tmp.data == x or tmp.data is x:
+                return True
+            tmp = tmp.next
+        return False
+
+    def __contains__(self, x: any) -> bool:
+        """
+        Return true if element or Double node exist in linked list.
+        Use for python builtin "in" method.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(3):
+            dll1.append(i)
+        1 in dll1
+        :param x:
+        :return boolean true of false:
+        """
+        if isinstance(x, DoubleNode) and self.contains_node(x):
+            return self.contains_node(x)
+        return self.contains(x)
+
+    def contains_node(self, x: any) -> bool:
+        """
+        Return true if Double Node instance is one of the linked list nodes, otherwise return false.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(2):
+            dll1.append(i)
+        x = dll1.head.next
+        dll1.contains_node(x)
+        :param x:
+        :return boolean true or false:
+        """
+        if not isinstance(x, DoubleNode):
+            raise ValueError(f"Element= {x} Shoul be DoubleNode instance")
+        if self.is_empty():
+            return False
+        tmp: DoubleNode = self.head
+        while tmp:
+            if tmp is x:
+                return True
+            tmp = tmp.next
+        return False
+
+    def pop(self) -> DoubleNode:
+        """
+        Remove from tail(rightmost) element and returning it.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(4):
+            dll1.append(i)
+        dll1.pop()
+        :return data of DoubleNode instance:
+        """
+        if self.is_empty():
+            raise IndexError("Can't delete from empty list")
+        if self.length() == 1:
+            val: DoubleNode = self.head
+            self.head = None
+            self.tail = self.tail
+            self.size -= 1
+            return val.data
+        val: DoubleNode = self.tail
+        self.tail = self.tail.prev
+        self.tail.next = None
+        self.size -= 1
+        return val.data
+
+    def popleft(self) -> DoubleNode:
+        """
+        Removing from head(leftmost) node and return it.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(2):
+            dll1.append(i)
+        dll1.popleft()
+        :return data of Double Node instance:
+        """
+        if self.is_empty():
+            raise IndexError("Can't remove from empty list")
+        if self.length() == 1:
+            val: DoubleNode = self.head
+            self.head = None
+            self.tail = self.head
+            self.size -= 1
+            return val.data
+        val: DoubleNode = self.head
+        self.head = self.head.next
+        self.head.prev = None
+        self.size -= 1
+        return val.data
+
+    def remove(self, x: any) -> DoubleNode:
+        """
+        Remove given element or DoubleNode if it exists in list nodes data and return it.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(2):
+            dll1.append(i)
+        dll1.remove(1)
+        :param x:
+        :return data of DoubleNode instance:
+        """
+        if self.is_empty():
+            raise IndexError("Can't delete from empty list")
+        if isinstance(x, DoubleNode) and self.contains_node(x):
+            return self.remove_node(x)
+        if not self.contains(x):
+            raise ValueError(f"Element= {x} not in list")
+
+        if self.length() == 1:
+            val: DoubleNode = self.head
+            self.head = None
+            self.tail = self.head
+            self.size -= 1
+            return val.data
+
+        tmp: DoubleNode = self.head
+        while tmp:
+            if tmp.data == x or tmp.data is x:
+                if tmp is self.tail:
+                    val: DoubleNode = tmp
+                    self.tail = tmp.prev
+                    self.tail.next = tmp.next
+                    self.size -= 1
+                    return val.data
+
+                elif tmp is self.head:
+                    val: DoubleNode = tmp
+                    self.head = tmp.next
+                    self.head.prev = None
+                    self.size -= 1
+                    return val.data
+
+                val: DoubleNode = tmp
+                tmp.prev.next = tmp.next
+                tmp.next.prev = tmp.prev
+                self.size -= 1
+                return val.data
+            tmp = tmp.next
+
+    def remove_node(self, x: DoubleNode) -> DoubleNode:
+        """
+        Delete given DoubleNode x if it is one of double nodes in list and return node.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(4):
+            dll1.append(i)
+        dll1.remove_node(dll1.head)
+        :param x:
+        :return instance of DoubleNode class:
+        """
+        if not isinstance(x, DoubleNode):
+            raise ValueError(f"{type(x)} should be DoubleNode instance")
+        if self.is_empty():
+            raise IndexError("Can't delete from emtpy list")
+        if not self.contains_node(x):
+            raise ValueError(f"Node {x} not in list nodes")
+        if self.length() == 1:
+            val: DoubleNode = self.head
+            self.head = None
+            self.tail = self.head
+            self.size -= 1
+            return val.data
+
+        tmp: DoubleNode = self.head
+        while tmp:
+            if tmp is x:
+                if tmp is self.tail:
+                    val: DoubleNode = tmp
+                    self.tail = tmp.prev
+                    tmp.prev.next = tmp.next
+                    self.size -= 1
+                    return val
+
+                elif tmp is self.head:
+                    val: DoubleNode = tmp
+                    self.head = tmp.next
+                    self.head.prev = None
+                    self.size -= 1
+                    return val
+
+                val: DoubleNode = tmp
+                tmp.prev.next = tmp.next
+                tmp.next.prev = tmp.prev
+                self.size -= 1
+                return val
+            tmp = tmp.next
+
+    def remove_at(self, x: int) -> DoubleNode:
+        """
+        Deleting node at given position. 1 indexing of list.
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(5):
+            dll1.append(i)
+        dll1.remove_at(1)
+        :param x:
+        :return instance of DoubleNode class:
+        """
+        if self.is_empty():
+            raise IndexError("Can't delete from empty list")
+        if not 1 <= x <= self.length():
+            raise IndexError(f"List index= {x} out of range")
+        idx: int = 1
+        tmp: DoubleNode = self.head
+        while idx < x:
+            idx += 1
+            tmp = tmp.next
+        return self.remove_node(tmp)
+
+    def reverse(self) -> None:
+        """
+        Reversing linked list. Time Complexity is O(N) and Memory Complexity is O(1).
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(5):
+            dll1.append(i)
+        dll1.reverse()
+        :return None:
+        """
+        if self.is_empty():
+            raise ValueError("Can't reverse empty linked list")
+
+        current: DoubleNode = self.head
+        prev_node: DoubleNode | None = None
+        while current:
+            next_node: DoubleNode = current.next
+            current.next = prev_node
+            current.prev = next_node
+            prev_node = current
+            current = next_node
+        self.head = prev_node
+
+    def clear(self) -> None:
+        """
+        Clear all elements in linked list.
+        Time complexity O(1).
+        Example of usages:
+        dll1 = DoubleLinkedList()
+        for i in range(10):
+            dll1.append(i)
+        dll1.clear()
+        :return None:
+        """
+        self.head = None
+        self.tail = self.head
+        self.size = 0
+# TODO complete insert at in SingleLinkedList and DoubleLinkedList
