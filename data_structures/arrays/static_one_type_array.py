@@ -32,7 +32,10 @@ class StaticOneTypeArray:
         self._capacity = capacity
         self.type = type
         self.size: int = 0
-        self.array = array(self.definition_types.get(self.type), [self.type(0) for _ in range(self.capacity)])
+        if self.type != str:
+            self.array = array(self.definition_types.get(self.type), [self.type(0) for _ in range(self.capacity)])
+        else:
+            self.array = list('0' for _ in range(self.capacity))
 
     @property
     def capacity(self):
@@ -196,7 +199,10 @@ class StaticOneTypeArray:
         :return None:
         """
         self.size = 0
-        self.array = array(self.definition_types.get(self.type), [self.type(0) for _ in range(self.capacity)])
+        if self.type != str:
+            self.array = array(self.definition_types.get(self.type), [self.type(0) for _ in range(self.capacity)])
+        else:
+            self.array = list('0' for _ in range(self.capacity))
 
     def length(self) -> int:
         """
