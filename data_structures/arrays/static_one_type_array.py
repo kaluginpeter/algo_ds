@@ -56,7 +56,7 @@ class StaticOneTypeArray:
         output: list[str] = list()
         for i in range(self.length()):
             output.append(str(self.array[i]))
-        return '[' + ', '.join(output) + ']'
+        return '[' + ', '.join(f"'{i}'" if self.type == str else str(i) for i in output) + ']'
 
     def append(self, x) -> None:
         """
@@ -125,12 +125,10 @@ class StaticOneTypeArray:
         stack.append(x)
         self.size += 1
         for i in range(self.length() + 1 - idx):
-            print('before', str(self.array))
             old_item = self.array[idx]
             self.array[idx] = stack.pop()
             stack.append(old_item)
             idx += 1
-            print('after', str(self.array))
 
     def pop(self, idx: int | None = None) -> str | int | float:
         """
