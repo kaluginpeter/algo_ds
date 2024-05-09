@@ -599,8 +599,8 @@ class StaticMultiTypeArray:
         """
         Returning list names of all available methods.
         Example of usages:
-        sota1 = StaticOneTypeArray()
-        sota1.all_methods()
+        smta = StaticMultiTypeArray()
+        smta.all_methods()
         :return list of strings:
         """
         return dir(StaticMultiTypeArray)
