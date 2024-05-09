@@ -11,7 +11,7 @@ class DynamicOneTypeArray:
     First(optional) - type, either str or int or float. By default, sets to int type.
     For more information about all available methods,
     call all_methods methods. Example of usages:
-    dota = DynamicOneTypeArray(int, 10)
+    dota = DynamicOneTypeArray(int)
     dota.all_methods()
     """
     def __init__(self, type: str | int | float = int):
