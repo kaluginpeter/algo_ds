@@ -5,7 +5,7 @@ from copy import deepcopy
 
 class DynamicOneTypeArray:
     """
-    Implementation of static one type array.
+    Implementation of Dynamic one type array.
     Array can store either str or int, float instance type.
     Required arguments:
     First(optional) - type, either str or int or float. By default, sets to int type.
@@ -71,8 +71,8 @@ class DynamicOneTypeArray:
         """
         Increase capacity on given x if x is not give make capacity double more.
         Example of usages:
-        sota = DynamicOneTypeArray()
-        sota.increase_capacity()
+        dota = DynamicOneTypeArray()
+        dota.increase_capacity()
         :param x: 
         :return None: 
         """
@@ -87,7 +87,7 @@ class DynamicOneTypeArray:
         """
         Return string representation of array.
         Use for python builtin function str().
-        Example of uages:
+        Example of usages:
         dota = DynamicOneTypeArray()
         str(dota)
         :return string representation of array:
