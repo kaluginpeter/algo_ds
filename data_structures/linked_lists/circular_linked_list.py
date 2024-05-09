@@ -1,4 +1,5 @@
-from node import Node
+from data_structures.arrays.dynamic_multi_type_array import DynamicMultiTypeArray
+from data_structures.linked_lists.node import Node
 
 
 class CircularLinkedList:
@@ -21,7 +22,7 @@ class CircularLinkedList:
         """
         if self.size == 0:
             return 'None'
-        output: list[str] = list()
+        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
         tmp: Node = self.head
         while tmp is not self.tail:
             output.append(str(tmp))

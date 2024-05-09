@@ -1,4 +1,5 @@
-from double_node import DoubleNode
+from data_structures.arrays.dynamic_multi_type_array import DynamicMultiTypeArray
+from data_structures.linked_lists.double_node import DoubleNode
 
 
 class DoubleLinkedList:
@@ -22,7 +23,8 @@ class DoubleLinkedList:
         """
         if self.is_empty():
             return 'None'
-        output: list[str] = ['None']
+        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
+        output.append('None')
         tmp: DoubleNode = self.head
         while tmp:
             output.append(str(tmp))

@@ -17,4 +17,4 @@ class DoubleNode:
         "data_of_node"
         :return str type:
         """
-        return f'{self.data}'
+        return f"'{self.data}'" if type(self.data) == str else f'{self.data}'
