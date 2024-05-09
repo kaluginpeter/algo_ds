@@ -603,4 +603,4 @@ class StaticMultiTypeArray:
         sota1.all_methods()
         :return list of strings:
         """
-        return dir(StaticOneTypeArray)
+        return dir(StaticMultiTypeArray)
