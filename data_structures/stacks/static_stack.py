@@ -116,6 +116,8 @@ class StaticStack:
         ss.min_value()
         :return object(element in stack):
         """
+        if not self.min_value_method:
+            raise SystemError("Method not available! Create new stack with boolean min_value_method on True")
         if self.is_empty():
             raise IndexError("Stack is empty")
         return self.minimum_value_in_stack[-1]
@@ -133,7 +135,7 @@ class StaticStack:
         :return object(element in stack):
         """
         if not self.max_value_method:
-            raise SystemError("Method not available! Make boolean max_value_method on True before usage")
+            raise SystemError("Method not available! Create new stack with boolean max_value_method on True")
         if self.is_empty():
             raise IndexError("Stack is empty")
         return self.maximum_value_in_stack[-1]
