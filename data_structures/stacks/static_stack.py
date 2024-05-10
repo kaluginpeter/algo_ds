@@ -5,9 +5,10 @@ class StaticStack:
     """
     Implementation of Static Stack data structure.
     Static stack using Static Multi Type Array for storing objects.
-    Static stack can store only one of the different data types, because
+    Static stack (can store only one of the different data types, because
     implementation use some amortized operation and attempting to push
-    some different types of object will throw an exception.
+    some different types of object will throw an exception)*.
+    * - only if min_value_method or max_value_method is True
     Required params:
     capacity: int - optional, by default sets to 10. Capacity will define size of stack.
     min_value_method: bool optional, by default sets to false. If true keep track minimum value in stack

@@ -4,10 +4,11 @@ from data_structures.arrays.dynamic_multi_type_array import DynamicMultiTypeArra
 class DynamicStack:
     """
     Implementation of Dynamic Stack data structure.
-    Static stack using Dynamic Multi TypeArray for storing objects.
-    Static stack can store only one of the different data types, because
+    Dynamic stack using Dynamic Multi TypeArray for storing objects.
+    Dynamic stack (can store only one of the different data types, because
     implementation use some amortized operation and attempting to push
-    some different types of object will throw an exception.
+    some different types of object will throw an exception)*.
+    * - only if min_value_method or max_value_method is True
     Required params:
     min_value_method: bool optional, by default sets to false. If true keep track minimum value in stack
     max_value_method: bool optional, by default sets to false. It true keep track maximum value in stack
