@@ -57,14 +57,17 @@ class StaticStack:
         :param x:
         :return None:
         """
-        self.stack.append(x)
-
-        if self.length() == 1:
+        if self.is_empty():
+            self.stack.append(x)
             if self.min_value_method:
                 self.minimum_value_in_stack.append(x)
             if self.max_value_method:
                 self.maximum_value_in_stack.append(x)
             return
+
+        if (self.min_value_method or self.max_value_method) and not isinstance(x, type(self.peek())):
+            raise TypeError("Can't append element not the same type as other in stack")
+        self.stack.append(x)
 
         if self.min_value_method:
             self.minimum_value_in_stack.append(self.min_value() if x > self.maximum_value_in_stack[-1] else x)
