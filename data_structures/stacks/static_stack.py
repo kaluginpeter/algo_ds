@@ -28,6 +28,22 @@ class StaticStack:
         if self.max_value_method:
             self.maximum_value_in_stack: StaticMultiTypeArray = StaticMultiTypeArray(capacity=capacity)
 
+    def __str__(self) -> str:
+        """
+        Return string representation of stack.
+        Use for python builtin function str().
+        Example of usages:
+        ss = StaticStack()
+        str(ss)
+        :return string representation of stack:
+        """
+        if self.is_empty():
+            return '[]'
+        output: StaticMultiTypeArray = StaticMultiTypeArray(capacity=self.stack.length())
+        for i in self.stack:
+            output.append(i)
+        return '[' + ', '.join(f"'{item}'" if type(item) == str else str(item) for item in output) + ']'
+
     def push(self, x: any) -> None:
         """
         Push element to the top of stack.
@@ -152,6 +168,22 @@ class StaticStack:
         :return boolean true of false:
         """
         return self.stack.length() == self.stack.capacity
+
+    def clear(self) -> None:
+        """
+        Clear all data in stack.
+        Example of usages:
+        ss = StaticStack()
+        for i in range(5):
+            ss.push(i)
+        ss.clear()
+        :return None:
+        """
+        self.stack.clear()
+        if self.min_value_method:
+            self.minimum_value_in_stack.clear()
+        if self.max_value_method:
+            self.maximum_value_in_stack.clear()
 
     def all_methods(self) -> list[str]:
         """
