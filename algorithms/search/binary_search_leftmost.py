@@ -11,12 +11,12 @@ def binary_search_leftmost(sequence: iter, target: any, possibly: bool = False) 
     otherwise if it set to False return -1 if target doesn't exist in sequence.
     :return int:
     Example us usages:
-    seq: list[int] = [1, 2, 3, 4, 5]
-    binary_search_boolean(seq, 1) -> 0
+    seq: list[int] = [1, 2, 2, 3, 4, 5]
+    binary_search_boolean(seq, 2) -> 1
     binary_search_boolean(seq, 6) -> -1
-    seq: str = 'abcdefg'
+    seq: str = 'aabbcdefg'
     binary_search_boolean(seq, 'a') -> 0
-    binary_search_boolean(seq, 'z') -> -1
+    binary_search_boolean(seq, 'z', possibly=True) -> 9
     """
     n: int = len(sequence)
     left: int = 0
