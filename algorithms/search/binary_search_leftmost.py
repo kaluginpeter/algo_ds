@@ -12,11 +12,11 @@ def binary_search_leftmost(sequence: iter, target: any, possibly: bool = False) 
     :return int:
     Example us usages:
     seq: list[int] = [1, 2, 2, 3, 4, 5]
-    binary_search_boolean(seq, 2) -> 1
-    binary_search_boolean(seq, 6) -> -1
+    binary_search_leftmost(seq, 2) -> 1
+    binary_search_leftmost(seq, 6) -> -1
     seq: str = 'aabbcdefg'
-    binary_search_boolean(seq, 'a') -> 0
-    binary_search_boolean(seq, 'z', possibly=True) -> 9
+    binary_search_leftmost(seq, 'a') -> 0
+    binary_search_leftmost(seq, 'z', possibly=True) -> 9
     """
     n: int = len(sequence)
     left: int = 0
@@ -31,5 +31,5 @@ def binary_search_leftmost(sequence: iter, target: any, possibly: bool = False) 
         else:
             left = middle + 1
     if possibly:
-        return right if not seen else right + 1
-    return -1
+        return right + 1
+    return -1 if not seen else right + 1
