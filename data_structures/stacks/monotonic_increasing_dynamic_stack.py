@@ -13,7 +13,7 @@ class MonotonicIncreasingDynamicStack:
     min_value_method: bool optional, by default sets to false. If true keep track minimum value in stack
     max_value_method: bool optional, by default sets to false. It true keep track maximum value in stack
     Example of usages:
-    mids = MonotonicIncreasingDynamicStack(10)
+    mids = MonotonicIncreasingDynamicStack()
     For more information about available methods use all_methods() methods, like:
     mids.all_methods()
     """

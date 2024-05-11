@@ -108,7 +108,7 @@ class DynamicOneTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() + 1 >= self.capacity:
             self.increase_capacity()
         if type(x) != self.type:
             raise ValueError(f"Object= {type(x)} should be {self.type} instance")
@@ -256,7 +256,7 @@ class DynamicOneTypeArray:
         """
         if not hasattr(x, '__iter__'):
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
-        if self.length() + len(x) > self.capacity:
+        if self.length() + len(x) >= self.capacity:
             self.increase_capacity(len(x))
         for i in x:
             if not isinstance(i, self.type):
@@ -276,7 +276,7 @@ class DynamicOneTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() + 1 >= self.capacity:
             self.increase_capacity()
         if not isinstance(x, self.type):
             raise ValueError(f"Object= {type(x)} should be {self.type} instance")

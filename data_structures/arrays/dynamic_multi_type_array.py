@@ -9,7 +9,7 @@ class DynamicMultiTypeArray:
     Array can store either str or int, float instance type.
     For more information about all available methods,
     call all_methods methods. Example of usages:
-    dmta = DynamicMultiTypeArray(int)
+    dmta = DynamicMultiTypeArray()
     dmta.all_methods()
     """
     def __init__(self):
@@ -87,7 +87,7 @@ class DynamicMultiTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() + 1 >= self.capacity:
             self.increase_capacity()
         self.array[self.length()] = x
         self.size += 1
@@ -224,7 +224,7 @@ class DynamicMultiTypeArray:
         if not hasattr(x, '__iter__'):
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
 
-        if self.length() + len(x) > self.capacity:
+        if self.length() + len(x) >= self.capacity:
             self.increase_capacity(len(x))
 
         for i in x:
@@ -241,7 +241,7 @@ class DynamicMultiTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() + 1 >= self.capacity:
             self.increase_capacity()
 
         if pos >= self.length():
