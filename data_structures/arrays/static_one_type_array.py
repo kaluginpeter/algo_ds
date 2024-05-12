@@ -75,7 +75,7 @@ class StaticOneTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() >= self.capacity:
             raise IndexError("Array have max length of capacity. Can't append")
         if type(x) != self.type:
             raise ValueError(f"Object= {type(x)} should be {self.type} instance")
@@ -97,7 +97,7 @@ class StaticOneTypeArray:
         """
         if not isinstance(x, array) and not isinstance(x, StaticOneTypeArray):
             raise ValueError(f"Type= {type(x)} should be array instance")
-        if self.length() + len(x) > self.capacity:
+        if self.length() + len(x) >= self.capacity:
             raise IndexError("Can't concatenate array. Capacity will be overload")
         for i in x:
             if not isinstance(i, self.type):
@@ -144,7 +144,7 @@ class StaticOneTypeArray:
         """
         if not isinstance(x, int):
             raise ValueError(f"Type= {type(x)} of given object should be int instance")
-        if self.length() * x > self.capacity:
+        if self.length() * x >= self.capacity:
             raise IndexError("Can't multi concatenate. Capacity will overload")
 
         if self.type != str:
@@ -223,7 +223,7 @@ class StaticOneTypeArray:
         """
         if not hasattr(x, '__iter__'):
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
-        if self.length() + len(x) > self.capacity:
+        if self.length() + len(x) >= self.capacity:
             raise IndexError("Length of given sequence can't be added in array, capacity will be overload!")
 
         for i in x:
@@ -244,7 +244,7 @@ class StaticOneTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() >= self.capacity:
             raise ValueError("Capacity if full. Can't insert in full array")
         if not isinstance(x, self.type):
             raise ValueError(f"Object= {type(x)} should be {self.type} instance")

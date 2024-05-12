@@ -108,8 +108,8 @@ class DynamicMultiTypeArray:
         if not isinstance(x, array) and not isinstance(x, DynamicMultiTypeArray):
             raise ValueError(f"Type= {type(x)} should be array instance")
 
-        if self.length() + len(x) > self.capacity:
-            self.increase_capacity(len(x))
+        if self.length() + len(x) >= self.capacity:
+            self.increase_capacity(self.length() + len(x))
 
         output: DynamicMultiTypeArray = DynamicMultiTypeArray()
         idx: int = 0
@@ -149,7 +149,7 @@ class DynamicMultiTypeArray:
         """
         if not isinstance(x, int):
             raise ValueError(f"Type= {type(x)} of given object should be int instance")
-        if self.length() * x > self.capacity:
+        if self.length() * x >= self.capacity:
             self.increase_capacity(self.length() * x)
 
         output: DynamicMultiTypeArray = DynamicMultiTypeArray()
@@ -225,7 +225,7 @@ class DynamicMultiTypeArray:
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
 
         if self.length() + len(x) >= self.capacity:
-            self.increase_capacity(len(x))
+            self.increase_capacity(self.length() + len(x))
 
         for i in x:
             self.append(i)

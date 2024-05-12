@@ -59,7 +59,7 @@ class StaticMultiTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() >= self.capacity:
             raise IndexError("Array have max length of capacity. Can't append")
         self.array[self.length()] = x
         self.size += 1
@@ -79,7 +79,7 @@ class StaticMultiTypeArray:
         """
         if not isinstance(x, array) and not isinstance(x, StaticMultiTypeArray):
             raise ValueError(f"Type= {type(x)} should be array instance")
-        if self.length() + len(x) > self.capacity:
+        if self.length() + len(x) >= self.capacity:
             raise IndexError("Can't concatenate array. Capacity will be overload")
 
         output: StaticMultiTypeArray = StaticMultiTypeArray(capacity=self.capacity)
@@ -120,7 +120,7 @@ class StaticMultiTypeArray:
         """
         if not isinstance(x, int):
             raise ValueError(f"Type= {type(x)} of given object should be int instance")
-        if self.length() * x > self.capacity:
+        if self.length() * x >= self.capacity:
             raise IndexError("Can't multi concatenate. Capacity will overload")
 
         output: StaticMultiTypeArray = StaticMultiTypeArray(capacity=self.capacity)
@@ -194,7 +194,7 @@ class StaticMultiTypeArray:
         """
         if not hasattr(x, '__iter__'):
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
-        if self.length() + len(x) > self.capacity:
+        if self.length() + len(x) >= self.capacity:
             raise IndexError("Length of given sequence can't be added in array, capacity will be overload!")
 
         for i in x:
@@ -211,7 +211,7 @@ class StaticMultiTypeArray:
         :param x:
         :return None:
         """
-        if self.length() + 1 > self.capacity:
+        if self.length() >= self.capacity:
             raise ValueError("Capacity if full. Can't insert in full array")
 
         if pos >= self.length():
@@ -223,7 +223,7 @@ class StaticMultiTypeArray:
         idx: int = 0
         while idx < pos:
             idx += 1
-        stack: StaticMultiTypeArray = StaticMultiTypeArray(capacity=self.length() - idx)
+        stack: StaticMultiTypeArray = StaticMultiTypeArray(capacity=self.length() + 1 - idx)
         stack.append(x)
         self.size += 1
         for i in range(self.length() + 1 - idx):

@@ -130,8 +130,8 @@ class DynamicOneTypeArray:
         """
         if not isinstance(x, array) and not isinstance(x, DynamicOneTypeArray):
             raise ValueError(f"Type= {type(x)} should be array instance")
-        if self.length() + len(x) > self.capacity:
-            self.increase_capacity(len(x))
+        if self.length() + len(x) >= self.capacity:
+            self.increase_capacity(self.length() + len(x))
         for i in x:
             if not isinstance(i, self.type):
                 raise ValueError(f"Element= {i} type= {type(i)} should be= {self.type} instance")
@@ -177,7 +177,7 @@ class DynamicOneTypeArray:
         """
         if not isinstance(x, int):
             raise ValueError(f"Type= {type(x)} of given object should be int instance")
-        if self.length() * x > self.capacity:
+        if self.length() * x >= self.capacity:
             self.increase_capacity(self.length() * x)
 
         if self.type != str:
@@ -257,7 +257,7 @@ class DynamicOneTypeArray:
         if not hasattr(x, '__iter__'):
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
         if self.length() + len(x) >= self.capacity:
-            self.increase_capacity(len(x))
+            self.increase_capacity(self.length() + len(x))
         for i in x:
             if not isinstance(i, self.type):
                 raise ValueError(f"Object= {i} should be {self.type} instance")
