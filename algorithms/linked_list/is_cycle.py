@@ -2,6 +2,7 @@ def is_cycle(head) -> bool:
     """
     Return true if linked list have cycle, otherwise return false.
     Using Tortoise and Hare algorithm.
+    Your Linked List should have .next attribute
     Time complexity O(N).
     Memory complexity O(1).
     Example of usages:
