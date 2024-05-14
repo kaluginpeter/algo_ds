@@ -1,117 +1,112 @@
-import inspect
 from array import array
 from copy import deepcopy
 
 
-class DynamicMultiTypeArray:
+class StaticOneTypeArray:
     """
-    Implementation of dynamic multi type array.
+    Implementation of static one type array.
     Array can store either str or int, float instance type.
+    Required arguments:
+    First(optional) - type, either str or int or float. By default, sets to int type.
+    Second(optional)- int, capacity. Set max length of size array. By default, sets to 10.
     For more information about all available methods,
     call all_methods methods. Example of usages:
-    dmta = DynamicMultiTypeArray()
-    dmta.all_methods()
+    sota1 = StaticOneTypeArray(int, 10)
+    sota1.all_methods()
     """
-    def __init__(self):
-        self._capacity = 10
-        self.size: int = 0
-        self.array = list(0 for _ in range(self.capacity))
+    def __init__(self, type: str | int | float = int, capacity: int = 10):
+        self.definition_types: dict[type, str] = {
+            str: 'u', int: 'q', float: 'd'
+        }
+        self.object_size: dict[str, int] = {
+            'q': 8, 'u': 4, 'd': 8
+        }
+        self.string_representation: dict[type, chr | str] = {
+            str: str, int: chr, float: str
+        }
+        if type not in self.definition_types:
+            raise ValueError(f"Type= {type} should be either int or str or float instance")
+        if not isinstance(capacity, int):
+            raise ValueError(f"Capacity type= {capacity} should be int instance")
+        if capacity < 1:
+            raise ValueError(f"Capacity= {capacity} can't be less than one")
+        if capacity == float('inf'):
+            raise ValueError(f"Capacity= {capacity} can't have infinity length")
 
-    def __rearrange_array(self, x: int = None) -> None:
-        """
-        Rearranging capacity of array.
-        Use only in builtin functions.
-        :param x:
-        :return None:
-        """
-        if not any('capacity' in i or 'increase_capacity' in i for i in inspect.stack()):
-            raise SystemError("Can't rearrange array forward this method")
-        if x is not None and not isinstance(x, int):
-            raise ValueError(f"Capacity type= {type(x)} should be int instance")
-        if x is not None and x <= self.capacity:
-            raise IndexError("Can't change capacity size less than current")
-        self.array += ['0' for _ in range((x - self.capacity) if x is not None else self.capacity)]
+        self._capacity = capacity
+        self.type = type
+        self.size: int = 0
+        if self.type != str:
+            self.array = array(self.definition_types.get(self.type), [self.type(0) for _ in range(self.capacity)])
+        else:
+            self.array = list('0' for _ in range(self.capacity))
 
     @property
     def capacity(self):
         return self._capacity
 
     @capacity.setter
-    def capacity(self, new_capacity: int):
-        if not isinstance(new_capacity, int):
-            raise ValueError(f"Capacity type= {type(new_capacity)} should be int instance")
-        if new_capacity <= self.capacity:
-            raise IndexError("Can't change capacity size less than current")
-
-        self.__rearrange_array(new_capacity)
-        self._capacity = new_capacity
-
-    def increase_capacity(self, x: int = None) -> None:
-        """
-        Increase capacity on given x if x is not give make capacity double more.
-        Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.increase_capacity()
-        :param x:
-        :return None:
-        """
-        if x is not None and not isinstance(x, int):
-            raise ValueError(f"Capacity type= {type(x)} should be int instance")
-        if x is not None and x <= self.capacity:
-            raise IndexError("Can't change capacity size less than current")
-        self.__rearrange_array(x)
-        self.capacity += self.capacity if x is None else x
+    def capacity(self, new_capacity):
+        raise ValueError("Capacity size cannot be changed after initialization")
 
     def __str__(self) -> str:
         """
         Return string representation of array.
         Use for python builtin function str().
-        Example of usages:
-        dmta = DynamicMultiTypeArray()
-        str(dmta)
+        Example of uages:
+        sota1 = StaticOneTypeArray()
+        str(sota1)
         :return string representation of array:
         """
         if self.is_empty():
             return '[]'
         output: list[str] = list()
         for i in range(self.length()):
-            output.append(self.array[i])
-        return '[' + ', '.join(f"'{i}'" if type(i) == str else str(i) for i in output) + ']'
+            output.append(str(self.array[i]))
+        return '[' + ', '.join(f"'{i}'" if self.type == str else i for i in output) + ']'
 
     def append(self, x) -> None:
         """
-        Appending given element to array..
+        Appending given element to array. Raise error if type is not as type defined in array.
+        Raise error if size of array is equal to capacity(i.e. array has max size).
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(1)
+        sota1 = StaticOneTypeArray()
+        sota1.append(1)
         :param x:
         :return None:
         """
-        if self.length() + 1 >= self.capacity:
-            self.increase_capacity()
+        if self.length() >= self.capacity:
+            raise IndexError("Array have max length of capacity. Can't append")
+        if type(x) != self.type:
+            raise ValueError(f"Object= {type(x)} should be {self.type} instance")
         self.array[self.length()] = x
         self.size += 1
 
     def __add__(self, x: array) -> array:
         """
-        Make concatenation of arrays.
+        Make concatenation of array.
         Use for python builtin + operator.
         Example of usages:
-        dmta1 = DynamicMultiTypeArray(int)
-        dmta2 = DynamicMultiTypeArray(int)
+        sota1 = StaticOneTypeArray(int)
+        sota2 = StaticOneTypeArray(int)
         for i in range(5):
-            dmta2.append(i)
-        dmta1 + dmta2
+            sota2.append(i)
+        sota1 + sota2
         :param x - array with same type of objects:
-        :return result of concatenations arrays:
+        :return result of concatenations array:
         """
-        if not isinstance(x, array) and not isinstance(x, DynamicMultiTypeArray):
+        if not isinstance(x, array) and not isinstance(x, StaticOneTypeArray):
             raise ValueError(f"Type= {type(x)} should be array instance")
-
         if self.length() + len(x) >= self.capacity:
-            self.increase_capacity(self.length() + len(x))
+            raise IndexError("Can't concatenate array. Capacity will be overload")
+        for i in x:
+            if not isinstance(i, self.type):
+                raise ValueError(f"Element= {i} type= {type(i)} should be= {self.type} instance")
 
-        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
+        if self.type != str:
+            output: StaticOneTypeArray[str | int | float] = StaticOneTypeArray(type=self.type, capacity=self.capacity)
+        else:
+            output: list[str] = list()
         idx: int = 0
         while idx < self.length():
             output.append(self.array[idx])
@@ -122,14 +117,14 @@ class DynamicMultiTypeArray:
 
     def __iadd__(self, x: array) -> array:
         """
-        Make concatenation of arrays.
+        Make concatenation of array.
         Use for python builtin += operator.
         Example of usages:
-        dmta1 = DynamicMultiTypeArray()
-        dmta2 = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray(int)
+        sota2 = StaticOneTypeArray(int)
         for i in range(5):
-            dmta2.append(i)
-        dmta1 += dmta2
+            sota2.append(i)
+        sota1 += sota2
         :param x - array with same type of objects:
         :return concatenated array:
         """
@@ -140,19 +135,22 @@ class DynamicMultiTypeArray:
         Make multi concatenation of array x times.
         Use for python builtin * operator.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(2):
-            dmta.append(i)
-        dmta * 2
+            sota1.append(i)
+        sota1 * 2
         :param x - integer represent reps of concatenating array:
         :return array object representing multi concatenation of array:
         """
         if not isinstance(x, int):
             raise ValueError(f"Type= {type(x)} of given object should be int instance")
         if self.length() * x >= self.capacity:
-            self.increase_capacity(self.length() * x)
+            raise IndexError("Can't multi concatenate. Capacity will overload")
 
-        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
+        if self.type != str:
+            output: StaticOneTypeArray[str | int | float] = StaticOneTypeArray(type=self.type, capacity=self.capacity)
+        else:
+            output: list[str] = list()
         initial_array = [self.array[idx] for idx in range(self.length())]
         for i in range(x):
             if self.type != str:
@@ -166,10 +164,10 @@ class DynamicMultiTypeArray:
         Make multi concatenation of array x times.
         Use for python builtin *= operator.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(2):
-            dmta.append(i)
-        dmta *= 2
+            sota1.append(i)
+        sota1 *= 2
         :param x - integer represent reps of concatenating array:
         :return array object representing multi concatenation of array:
         """
@@ -180,10 +178,10 @@ class DynamicMultiTypeArray:
         Make multi inverse concatenation of array x times.
         Use for python builtin * operator.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(2):
-            dmta.append(i)
-        2 * dmta
+            sota1.append(i)
+        2 * sota1
         :param x - integer represent reps of concatenating array:
         :return array object representing multi inverse concatenation of array:
         """
@@ -195,15 +193,17 @@ class DynamicMultiTypeArray:
         Index may be negative.
         Use for python builtin [] method.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(1)
-        dmta[0] = 0
+        sota1 = StaticOneTypeArray()
+        sota1.append(1)
+        sota1[0] = 0
         :param idx - index position in array:
         :param value - value that be inserted:
         :return None:
         """
         if not isinstance(idx, int):
             raise IndexError(f"Given type= {type(idx)} of index should be int instance")
+        if not isinstance(value, self.type):
+            raise ValueError(f"Given type= {type(value)} of object should be {self.type} instance")
 
         is_negative_index: bool = idx < 0
         if is_negative_index:
@@ -216,16 +216,19 @@ class DynamicMultiTypeArray:
         """
         Extending given iterable sequence in array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.extend([1, 2, 3])
+        sota1 = StaticOneTypeArray()
+        sota1.extend([1, 2, 3])
         :param x:
         :return None:
         """
         if not hasattr(x, '__iter__'):
             raise TypeError(f"Sequence= {type(x)} should be iterable for extending")
-
         if self.length() + len(x) >= self.capacity:
-            self.increase_capacity(self.length() + len(x))
+            raise IndexError("Length of given sequence can't be added in array, capacity will be overload!")
+
+        for i in x:
+            if not isinstance(i, self.type):
+                raise ValueError(f"Object= {i} should be {self.type} instance")
 
         for i in x:
             self.append(i)
@@ -235,14 +238,16 @@ class DynamicMultiTypeArray:
         Insert element at given postion.
         Array indexing starts with 0. Index can be negative.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.insert(555, 0)
+        sota1 = StaticOneTypeArray()
+        sota1.insert(555, 0)
         :param pos index for insertion element:
         :param x:
         :return None:
         """
-        if self.length() + 1 >= self.capacity:
-            self.increase_capacity()
+        if self.length() >= self.capacity:
+            raise ValueError("Capacity if full. Can't insert in full array")
+        if not isinstance(x, self.type):
+            raise ValueError(f"Object= {type(x)} should be {self.type} instance")
 
         if pos >= self.length():
             return self.append(x)
@@ -253,7 +258,7 @@ class DynamicMultiTypeArray:
         idx: int = 0
         while idx < pos:
             idx += 1
-        stack: DynamicMultiTypeArray = DynamicMultiTypeArray()
+        stack: StaticOneTypeArray = StaticOneTypeArray(type=self.type, capacity=self.length() - idx)
         stack.append(x)
         self.size += 1
         for i in range(self.length() + 1 - idx):
@@ -267,9 +272,9 @@ class DynamicMultiTypeArray:
         Delete element from given index or from the end of array if index not given.
         Indexing of array starts with 0. Index can be negative
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(1)
-        dmta.pop()
+        sota1 = StaticOneTypeArray()
+        sota1.append(1)
+        sota1.pop()
         :idx index of element in array
         :return deleted element:
         """
@@ -286,12 +291,12 @@ class DynamicMultiTypeArray:
             raise IndexError(f"Pop index= {start_idx} out of range")
 
         if idx == self.length() - 1:
-            val = self.array[idx]
+            val: str | int | float = self.array[idx]
             self.size -= 1
             return val
 
-        val = self.array[idx]
-        stack: DynamicMultiTypeArray = DynamicMultiTypeArray()
+        val: str | int | float = self.array[idx]
+        stack: StaticOneTypeArray = StaticOneTypeArray(type=self.type, capacity=self.length() - idx - 1)
         for i in range(idx + 1, self.length()):
             stack.append(self.array[i])
 
@@ -307,9 +312,9 @@ class DynamicMultiTypeArray:
         """
         Removing first occurrences of given element if it consists in array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(1)
-        dmta.remove(1)
+        sota1 = StaticOneTypeArray()
+        sota1.append(1)
+        sota1.remove(1)
         :param x:
         :return deleted element:
         """
@@ -329,9 +334,9 @@ class DynamicMultiTypeArray:
         Delete element at given index in array.
         Use for python builtin del function.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(1)
-        del dmta[0]
+        sota1 = StaticOneTypeArray()
+        sota1.append(1)
+        del sota1[0]
         :param idx:
         :return None:
         """
@@ -341,8 +346,8 @@ class DynamicMultiTypeArray:
         """
         Appending all elements from given list to array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.fromlist([1, 2, 3])
+        sota1 = StaticOneTypeArray()
+        sota1.fromlist([1, 2, 3])
         :param x:
         :return None:
         """
@@ -355,13 +360,13 @@ class DynamicMultiTypeArray:
         """
         Return list contains all elements in array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        dmta.tolist()
+            sota1.append(i)
+        sota1.tolist()
         :return all elements existing in array in list object:
         """
-        output: list = list()
+        output: list[str | int | float] = list()
         idx: int = 0
         while idx < self.length():
             output.append(self.array[idx])
@@ -372,21 +377,24 @@ class DynamicMultiTypeArray:
         """
         Clear all data in array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        dmta.clear()
+            sota1.append(i)
+        sota1.clear()
         :return None:
         """
         self.size = 0
-        self.array = list(0 for _ in range(self.capacity))
+        if self.type != str:
+            self.array = array(self.definition_types.get(self.type), [self.type(0) for _ in range(self.capacity)])
+        else:
+            self.array = list('0' for _ in range(self.capacity))
 
     def length(self) -> int:
         """
         Return length of array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.length()
+        sota1 = StaticOneTypeArray()
+        sota1.length()
         :return int instance representation length of array:
         """
         return self.size
@@ -396,8 +404,8 @@ class DynamicMultiTypeArray:
         Returning length of array length.
         Using for python builtin in function.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        len(dmta)
+        sota1 = StaticOneTypeArray()
+        len(sota1)
         :return int representation of length array:
         """
         return self.length()
@@ -406,8 +414,8 @@ class DynamicMultiTypeArray:
         """
         Return true is array is empty.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.is_empty()
+        sota1 = StaticOneTypeArray()
+        sota1.is_empty()
         :return boolean true or false:
         """
         return self.length() == 0
@@ -416,8 +424,8 @@ class DynamicMultiTypeArray:
         """
         Return true if given element exist in array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.contains(5)
+        sota1 = StaticOneTypeArray()
+        sota1.contains(5)
         :param x:
         :return boolean true or false:
         """
@@ -436,8 +444,8 @@ class DynamicMultiTypeArray:
         Return true if given element exist in array.
         Using for python builtin "in" function.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        5 in dmta
+        sota1 = StaticOneTypeArray()
+        5 in sota1
         :param x:
         :return boolean true of false:
         """
@@ -448,9 +456,9 @@ class DynamicMultiTypeArray:
         Return element at given index in array. Indexing starts with 0.
         Use for python builtin [] index function. Index may be negative.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(0)
-        dmta[0]
+        sota1 = StaticOneTypeArray()
+        sota1.append(0)
+        sota1[0]
         :param x:
         :return int index of element if array:
         """
@@ -475,9 +483,9 @@ class DynamicMultiTypeArray:
         Return index of first occurrences given element in array if it exists.
         Indexing starts with 0.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.append(1)
-        dmta.index(1)
+        sota1 = StaticOneTypeArray()
+        sota1.append(1)
+        sota1.index(1)
         :param x:
         :return int index position of first occurrences given element:
         """
@@ -494,29 +502,36 @@ class DynamicMultiTypeArray:
         """
         Sort array in place by given key and reverse variable.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        dmta.sort(reverse=True)
+            sota1.append(i)
+        sota1.sort(reverse=True)
         :param key(optional, by default None) - can be builtin variable or lambda expression:
         :param reverse(optional, by default False) - boolean true of false:
         :return None:
         """
-        output: list = [self.array[idx] for idx in range(self.length())]
+        output: list[str | int | float] = [self.array[idx] for idx in range(self.length())]
         output.sort(key=key, reverse=reverse)
+        if self.type != str:
+            self.clear()
+            self.fromlist(output)
+            return
         self.array = output + [0 for _ in range(self.capacity - self.length())]
 
     def deepcopy(self) -> array:
         """
         Make deepcopy of array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        dmta.deepcopy()
+            sota1.append(i)
+        sota1.deepcopy()
         :return copy array:
         """
-        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
+        if self.type != str:
+            output: StaticOneTypeArray[str | int | float] = StaticOneTypeArray(type=self.type, capacity=self.capacity)
+        else:
+            output: list[str] = list()
         idx: int = 0
         while idx < self.length():
             output.append(deepcopy(self.array[idx]))
@@ -529,10 +544,10 @@ class DynamicMultiTypeArray:
         Use for copy.deepcopy() method
         Example of usages:
         from copy import deepcopy
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        deepcopy(dmta)
+            sota1.append(i)
+        deepcopy(sota1)
         :return copy array:
         """
         return self.deepcopy()
@@ -541,10 +556,10 @@ class DynamicMultiTypeArray:
         """
         Make copy(shallow copy) of array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        dmta.copy()
+            sota1.append(i)
+        sota1.copy()
         :return copy array:
         """
         output = self
@@ -556,10 +571,10 @@ class DynamicMultiTypeArray:
         Use for copy.copy method.
         Example of usages:
         from copy import copy
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        copy(dmta)
+            sota1.append(i)
+        copy(sota1)
         :return copy array:
         """
         return self.copy()
@@ -568,8 +583,8 @@ class DynamicMultiTypeArray:
         """
         Return count of all occurrences element in array.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.count(1)
+        sota1 = StaticOneTypeArray()
+        sota1.count(1)
         :param x:
         :return integer representing count of given element in array:
         """
@@ -590,8 +605,8 @@ class DynamicMultiTypeArray:
         Time complexity O(N).
         Memory complexity O(1).
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.reverse()
+        sota1 = StaticOneTypeArray()
+        sota1.reverse()
         :return None:
         """
         left, right = 0, self.length() - 1
@@ -604,10 +619,10 @@ class DynamicMultiTypeArray:
         Return iterator with reversing sequence of array.
         Use for python builtin reversed() function.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        reversed(dmta)
+            sota1.append(i)
+        reversed(sota1)
         :return iterator with reversing sequence of array:
         """
         return reversed([self.array[idx] for idx in range(0, self.length())])
@@ -617,20 +632,40 @@ class DynamicMultiTypeArray:
         Return iterator with sequence of array elements.
         Use for python builtin iter() function.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
+        sota1 = StaticOneTypeArray()
         for i in range(5):
-            dmta.append(i)
-        iter(dmta)
+            sota1.append(i)
+        iter(sota1)
         :return iterator with elements in array sequence:
         """
         return iter([self.array[idx] for idx in range(0, self.length())])
+
+    def typecode(self) -> str:
+        """
+        Return one character of string representation type objects in array in C language.
+        Example of usages:
+        sota1 = StaticOneTypeArray()
+        sota1.typecode()
+        :return string character:
+        """
+        return self.definition_types.get(self.type)
+
+    def itemsize(self) -> int:
+        """
+        Return integer represent every item size in array in bytes.
+        Example of usages:
+        sota1 = StaticOneTypeArray()
+        sota1.itemsize()
+        :return integer:
+        """
+        return self.object_size.get(self.typecode())
 
     def all_methods(self) -> list[str]:
         """
         Returning list names of all available methods.
         Example of usages:
-        dmta = DynamicMultiTypeArray()
-        dmta.all_methods()
+        sota1 = StaticOneTypeArray()
+        sota1.all_methods()
         :return list of strings:
         """
-        return dir(DynamicMultiTypeArray)
+        return dir(StaticOneTypeArray)

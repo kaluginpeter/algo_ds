@@ -1,4 +1,4 @@
-from data_structures.arrays.static_multi_type_array import StaticMultiTypeArray
+from data_structures.array.static_multi_type_array import StaticMultiTypeArray
 
 
 class StaticStack:

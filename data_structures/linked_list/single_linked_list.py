@@ -1,18 +1,17 @@
-from data_structures.arrays.dynamic_multi_type_array import DynamicMultiTypeArray
-from data_structures.linked_lists.node import Node
+from data_structures.array.dynamic_multi_type_array import DynamicMultiTypeArray
+from data_structures.linked_list.node import Node
 
 
-class CircularLinkedList:
+class SingleLinkedList:
     """
-    Implementation of circular linked list.
+    Implementation of single linked list.
     To see all available methods use all_methods method.
     Example of usages:
-    cll1 = CircularLinkedList()
-    cll1.all_methods()
+    ll1 = SingleLinkedList()
+    ll1.all_methods()
     """
     def __init__(self, head: Node | None = None):
         self.head: Node | None = head
-        self.tail: Node | None = self.head
         self.size: int = 0
 
     def __str__(self) -> str:
@@ -24,10 +23,9 @@ class CircularLinkedList:
             return 'None'
         output: DynamicMultiTypeArray = DynamicMultiTypeArray()
         tmp: Node = self.head
-        while tmp is not self.tail:
+        while tmp:
             output.append(str(tmp))
             tmp = tmp.next
-        output.append(str(self.tail))
         output.append('None')
         return '->'.join(output)
 
@@ -35,34 +33,33 @@ class CircularLinkedList:
         """
         Returning list names of all available methods.
         Example of usages:
-        cll1 = CircularLinkedList()
-        cll1.all_methods()
+        ll1 = SingleLinkedList()
+        ll1.all_methods()
         :return list of strings:
         """
-        return dir(CircularLinkedList)
+        return dir(SingleLinkedList)
 
     def append(self, x: any) -> None:
         """
-        Appending given param x to the end(in tail) of linked list.
+        Appending given param x to the end of linked list.
         x - any type of class.
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         for i in range(4):
-            cll1.append(i)
+            ll1.append(i)
         :param x:
         :return None:
         """
 
         if self.is_empty():
             self.head = Node(data=x)
-            self.tail = self.head
-            self.tail.next = self.head
             self.size += 1
             return
 
-        self.tail.next = Node(data=x)
-        self.tail = self.tail.next
-        self.tail.next = self.head
+        tmp: Node = self.head
+        while tmp.next:
+            tmp = tmp.next
+        tmp.next = Node(data=x)
         self.size += 1
 
     def insert(self, pos: int, x: any) -> None:
@@ -71,29 +68,28 @@ class CircularLinkedList:
         Index may be negative.
         First param is index, second - element.
         Example of usages:
-        cll1 = CircularLinkedList()
-        cll1.insert(0, 1)
+        ll1 = SingleLinkedList()
+        ll1.insert(0, 1)
         :param pos:
         :param x:
         :return None:
         """
         if self.is_empty():
             self.head = Node(data=x)
-            self.tail = self.head
-            self.tail.next = self.head
             self.size += 1
             return
 
         is_negative_position: bool = pos < 0
         if pos == 0 or (is_negative_position and abs(pos) >= self.length()):
             self.head = Node(data=x, next=self.head)
-            self.tail.next = self.head
             self.size += 1
             return
 
         elif pos >= self.length():
-            self.tail.next = Node(data=x, next=self.head)
-            self.tail = self.tail.next
+            tmp: Node = self.head
+            while tmp.next:
+                tmp = tmp.next
+            tmp.next = Node(data=x)
             self.size += 1
             return
 
@@ -113,8 +109,8 @@ class CircularLinkedList:
         Returning length of linked list.
         Time complexity O(1).
         Example usages:
-        cll1 = CircularLinkedList()
-        cll1.length()
+        ll1 = SingleLinkedList()
+        ll1.length()
         :return length of linked list:
         """
         return self.size
@@ -125,8 +121,8 @@ class CircularLinkedList:
         Use this for python builtin len() method.
         Time complexity O(1).
         Example of usages:
-        cll1 = CircularLinkedList()
-        len(cll1)
+        ll1 = SingleLinkedList()
+        len(ll1)
         :return length of linked list:
         """
         return self.length()
@@ -135,8 +131,8 @@ class CircularLinkedList:
         """
         Return true if linked list is empty, otherwise return False
         Example of usages:
-        cll1 = CircularLinkedList()
-        cll1.is_empty()
+        ll1 = SingleLinkedList()
+        ll1.is_empty()
         :return boolean type True or False:
         """
         return self.length() == 0
@@ -145,11 +141,11 @@ class CircularLinkedList:
         """
         Returning true if element or Node exists in linked list nodes data, otherwise return false
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         for i in range(4):
-            cll1.append(i)
+            ll1.append(i)
         x = ll1.head
-        cll1.contains(x) or cll1.contains(0)
+        ll1.contains(x) or ll1.contains(0)
         :param x:
         :return boolean type of True and False:
         """
@@ -158,13 +154,10 @@ class CircularLinkedList:
         if self.is_empty():
             return False
         tmp: Node = self.head
-        self.tail.next = None
         while tmp:
             if tmp.data == x or tmp.data is x:
-                self.tail.next = self.head
                 return True
             tmp = tmp.next
-        self.tail.next = self.head
         return False
 
     def __contains__(self, x: any) -> bool:
@@ -172,9 +165,9 @@ class CircularLinkedList:
         Returning true if element or Node exists in linked list, otherwise return false.
         Use for builtin python "in" function.
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         x = 5
-        x in cll1
+        x in ll1
         :param x:
         :return boolean type of True and False:
         """
@@ -186,9 +179,9 @@ class CircularLinkedList:
         """
         Returning True if given Node exists in linked list nodes, otherwise return False.
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         x = Node(data=5)
-        cll1.contains_node(x)
+        ll1.contains_node(x)
         :param x:
         :return boolean type of True and False:
         """
@@ -197,13 +190,10 @@ class CircularLinkedList:
         if self.is_empty():
             return False
         tmp: Node = self.head
-        self.tail.next = None
         while tmp:
             if tmp is x:
-                self.tail.next = self.head
                 return True
             tmp = tmp.next
-        self.tail.next = self.head
         return False
 
     def pop(self) -> Node:
@@ -211,9 +201,9 @@ class CircularLinkedList:
         Deleting last element in linked list.
         Raise ValueError if list is empty.
         Example of usages:
-        cll1 = CircularLinkedList()
-        cll1.append(1)
-        cll1.pop()
+        ll1 = SingleLinkedList()
+        ll1.append(1)
+        ll1.pop()
         :return data of object Node instance:
         """
         if self.is_empty():
@@ -221,16 +211,13 @@ class CircularLinkedList:
         if self.length() == 1:
             val: Node = self.head
             self.head = None
-            self.tail = self.head
             self.size -= 1
             return val
-        self.tail.next = None
         tmp: Node = self.head
         while tmp.next.next:
             tmp = tmp.next
         val: Node = tmp.next
-        tmp.next = self.head
-        self.tail = tmp
+        tmp.next = None
         self.size -= 1
         return val
 
@@ -238,10 +225,10 @@ class CircularLinkedList:
         """
         Remove first occurrences of given element/Node in list nodes data and return it Node instance.
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         x = Node(data=5)
-        cll1.append(x.data)
-        cll1.remove(x.data)
+        ll1.append(x.data)
+        ll1.remove(x.data)
         :param x:
         :return data of instance Node class:
         """
@@ -251,30 +238,21 @@ class CircularLinkedList:
             return self.remove_node(x)
         if not self.contains(x):
             raise ValueError(f"Element {x} not in linked list")
-
         if self.length() == 1:
             val: Node = self.head
             self.head = None
-            self.tail = self.head
             self.size -= 1
             return val.data
-
         if self.head.data == x or self.head.data is x:
             val: Node = self.head
             self.head = self.head.next
-            self.tail.next = self.head
             self.size -= 1
             return val.data
-
-        self.tail.next = None
         tmp: Node = self.head
         while tmp.next:
             if tmp.next.data == x or tmp.next.data is x:
                 val: Node = tmp.next
                 tmp.next = tmp.next.next
-                if val is self.tail:
-                    self.tail = tmp
-                    self.tail.next = self.head
                 self.size -= 1
                 return val.data
             tmp = tmp.next
@@ -283,10 +261,10 @@ class CircularLinkedList:
         """
         Remove given Node instance from linked list and return it.
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         x = Node(data=1)
-        cll1.append(x.data)
-        cll1.remove_node(x)
+        ll1.append(x.data)
+        ll1.remove_node(x)
         :param x:
         :return Instance of Node class:
         """
@@ -294,30 +272,21 @@ class CircularLinkedList:
             raise IndexError("Can't remove from empty linked list")
         if not self.contains_node(x):
             raise ValueError(f"Node {x} not in linked list")
-
         if self.length() == 1:
             val: Node = self.head
             self.head = None
-            self.tail = self.head
             self.size -= 1
             return val
-
         if self.head is x:
             val: Node = self.head
             self.head = self.head.next
-            self.tail.next = self.head
             self.size -= 1
             return val
-
-        self.tail.next = None
         tmp: Node = self.head
         while tmp.next:
             if tmp.next is x:
                 val: Node = tmp.next
                 tmp.next = tmp.next.next
-                if val is self.tail:
-                    self.tail = tmp
-                    self.tail.next = self.head
                 self.size -= 1
                 return val
             tmp = tmp.next
@@ -326,10 +295,10 @@ class CircularLinkedList:
         """
         Removing Node at given position. Indexing of linked list starts with 1.
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         for i in range(10):
-            cll1.append(i)
-        cll1.remove_at(10)
+            ll1.append(i)
+        ll1.remove_at(10)
         :param x:
         :return Instance of Node class:
         """
@@ -350,37 +319,32 @@ class CircularLinkedList:
         """
         Reversing linked list. Time Complexity is O(N) and Memory Complexity is O(1).
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         for i in range(5):
-            cll1.append(i)
-        cll1.reverse()
+            ll1.append(i)
+        ll1.reverse()
         :return None:
         """
         if self.is_empty():
             raise ValueError("Can't reverse empty linked list")
-
         prev: Node | None = None
         current: Node = self.head
-        self.tail.next = None
-        initial_node: Node = self.head
         while current:
             nxt: Node = current.next
             current.next = prev
             prev = current
             current = nxt
         self.head = prev
-        self.tail = initial_node
-        self.tail.next = self.head
 
     def clear(self) -> None:
         """
         Clear all elements in linked list.
         Time complexity O(1).
         Example of usages:
-        cll1 = CircularLinkedList()
+        ll1 = SingleLinkedList()
         for i in range(10):
-            cll1.append(i)
-        cll1.clear()
+            ll1.append(i)
+        ll1.clear()
         :return None:
         """
         self.head = None

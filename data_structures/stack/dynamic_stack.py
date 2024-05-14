@@ -1,4 +1,4 @@
-from data_structures.arrays.dynamic_multi_type_array import DynamicMultiTypeArray
+from data_structures.array.dynamic_multi_type_array import DynamicMultiTypeArray
 
 
 class DynamicStack:

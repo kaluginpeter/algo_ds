@@ -1,5 +1,5 @@
-from data_structures.arrays.dynamic_multi_type_array import DynamicMultiTypeArray
-from data_structures.linked_lists.double_node import DoubleNode
+from data_structures.array.dynamic_multi_type_array import DynamicMultiTypeArray
+from data_structures.linked_list.double_node import DoubleNode
 
 
 class DoubleLinkedList:

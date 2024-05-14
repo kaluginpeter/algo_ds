@@ -1,25 +1,24 @@
-from data_structures.arrays.static_multi_type_array import StaticMultiTypeArray
+from data_structures.array.dynamic_multi_type_array import DynamicMultiTypeArray
 
 
-class MonotonicDecreasingStaticStack:
+class MonotonicDecreasingDynamicStack:
     """
     Implementation of Monotonic Decreasing Dynamic Stack data structure.
-    Monotonic Decreasing Static Stack using Static Multi Type Array for storing objects.
-    Monotonic Decreasing Static Stack (can store only one of the different data types, because
+    Monotonic Decreasing Dynamic Stack using Dynamic Multi Type Array for storing objects.
+    Monotonic Decreasing Dynamic Stack (can store only one of the different data types, because
     implementation use some amortized operation and attempting to push
     some different types of object will throw an exception)*.
     * - only if min_value_method or max_value_method is True
     Required params:
-    capacity: int - optional, by default sets to 10. Capacity will define size of stack.
     min_value_method: bool optional, by default sets to false. If true keep track minimum value in stack
     max_value_method: bool optional, by default sets to false. It true keep track maximum value in stack
     Example of usages:
-    mdss = MonotonicDecreasingStaticStack(10)
+    mdds = MonotonicDecreasingDynamicStack()
     For more information about available methods use all_methods() methods, like:
-    mdss.all_methods()
+    mdds.all_methods()
     """
-    def __init__(self, capacity: int = 10, min_value_method: bool = False, max_value_method: bool = False):
-        self.stack: StaticMultiTypeArray = StaticMultiTypeArray(capacity=capacity)
+    def __init__(self, min_value_method: bool = False, max_value_method: bool = False):
+        self.stack: DynamicMultiTypeArray = DynamicMultiTypeArray()
         self.min_value_method = min_value_method
         self.max_value_method = max_value_method
 
@@ -28,13 +27,13 @@ class MonotonicDecreasingStaticStack:
         Return string representation of stack.
         Use for python builtin function str().
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        str(mdss)
+        mdds = MonotonicDecreasingDynamicStack()
+        str(mdds)
         :return string representation of stack:
         """
         if self.is_empty():
             return '[]'
-        output: StaticMultiTypeArray = StaticMultiTypeArray()
+        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
         for i in self.stack:
             output.append(i)
         return '[' + ', '.join(f"'{item}'" if type(item) == str else str(item) for item in output) + ']'
@@ -46,8 +45,8 @@ class MonotonicDecreasingStaticStack:
         stack use amortized min_value method, so pushing will throw exception during comparison elements.
         Time complexity is O(1).
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.push(1)
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.push(1)
         :param x:
         :return None:
         """
@@ -69,9 +68,9 @@ class MonotonicDecreasingStaticStack:
         Raise error if stack is empty.
         Time complexity is O(1).
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.push(1)
-        mdss.pop()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.push(1)
+        mdds.pop()
         :return object(popped element):
         """
         return self.stack.pop()
@@ -82,9 +81,9 @@ class MonotonicDecreasingStaticStack:
         Raise error if stack is empty.
         Time complexity is O(1)
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.push(1)
-        mdss.peek()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.push(1)
+        mdds.peek()
         :return object(element in stack):
         """
         if self.is_empty():
@@ -98,13 +97,13 @@ class MonotonicDecreasingStaticStack:
         method will throw exception during comparison between them.
         Time complexity amortized, so its O(1).
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.push(1)
-        mdss.min_value()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.push(1)
+        mdds.min_value()
         :return object(element in stack):
         """
         if not self.min_value_method:
-            raise SystemError("Method not available! Set boolean min_value_method on True")
+            raise SystemError("Method not available! Create new stack with boolean min_value_method on True")
         if self.is_empty():
             raise IndexError("Stack is empty")
         return self.peek()
@@ -116,13 +115,13 @@ class MonotonicDecreasingStaticStack:
         method will throw exception during comparison between them.
         Time complexity amortized, so its O(1).
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.push(1)
-        mdss.max_value()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.push(1)
+        mdds.max_value()
         :return object(element in stack):
         """
         if not self.max_value_method:
-            raise SystemError("Method not available! Set boolean max_value_method on True")
+            raise SystemError("Method not available! Create new stack with boolean max_value_method on True")
         if self.is_empty():
             raise IndexError("Stack is empty")
         return self.stack[0]
@@ -132,8 +131,8 @@ class MonotonicDecreasingStaticStack:
         Return integer represent size(all elements store in stack) of stack.
         Time complexity amortized, so its O(1).
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.length()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.length()
         :return integer:
         """
         return self.stack.length()
@@ -142,8 +141,8 @@ class MonotonicDecreasingStaticStack:
         """
         Return True if stack is empty, otherwise return False.
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.is_empty()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.is_empty()
         :return boolean true of false:
         """
         return self.stack.is_empty()
@@ -152,10 +151,10 @@ class MonotonicDecreasingStaticStack:
         """
         Clear all data in stack.
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
+        mdds = MonotonicDecreasingDynamicStack()
         for i in range(5):
-            mdss.push(i)
-        mdss.clear()
+            mdds.push(i)
+        mdds.clear()
         :return None:
         """
         self.stack.clear()
@@ -164,8 +163,8 @@ class MonotonicDecreasingStaticStack:
         """
         Returning list names of all available methods.
         Example of usages:
-        mdss = MonotonicDecreasingStaticStack()
-        mdss.all_methods()
+        mdds = MonotonicDecreasingDynamicStack()
+        mdds.all_methods()
         :return list of strings:
         """
-        return dir(MonotonicDecreasingStaticStack)
+        return dir(MonotonicDecreasingDynamicStack)

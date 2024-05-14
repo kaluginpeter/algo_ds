@@ -1,11 +1,11 @@
-from data_structures.arrays.static_multi_type_array import StaticMultiTypeArray
+from data_structures.array.dynamic_multi_type_array import DynamicMultiTypeArray
 
 
-class MonotonicIncreasingStaticStack:
+class MonotonicIncreasingDynamicStack:
     """
-    Implementation of Monotonic Increasing Static Stack data structure.
-    Monotonic Increasing Static Stack using Static Multi Type Array for storing objects.
-    Monotonic Increasing Static Stack (can store only one of the different data types, because
+    Implementation of Monotonic Increasing Dynamic Stack data structure.
+    Monotonic Increasing Dynamic Stack using Dynamic Multi Type Array for storing objects.
+    Monotonic Increasing Dynamic Stack (can store only one of the different data types, because
     implementation use some amortized operation and attempting to push
     some different types of object will throw an exception)*.
     * - only if min_value_method or max_value_method is True
@@ -13,12 +13,12 @@ class MonotonicIncreasingStaticStack:
     min_value_method: bool optional, by default sets to false. If true keep track minimum value in stack
     max_value_method: bool optional, by default sets to false. It true keep track maximum value in stack
     Example of usages:
-    miss = MonotonicIncreasingDynamicStack(10)
+    mids = MonotonicIncreasingDynamicStack()
     For more information about available methods use all_methods() methods, like:
-    miss.all_methods()
+    mids.all_methods()
     """
-    def __init__(self, capacity: int = 10, min_value_method: bool = False, max_value_method: bool = False):
-        self.stack: StaticMultiTypeArray = StaticMultiTypeArray(capacity=capacity)
+    def __init__(self, min_value_method: bool = False, max_value_method: bool = False):
+        self.stack: DynamicMultiTypeArray = DynamicMultiTypeArray()
         self.min_value_method = min_value_method
         self.max_value_method = max_value_method
 
@@ -27,13 +27,13 @@ class MonotonicIncreasingStaticStack:
         Return string representation of stack.
         Use for python builtin function str().
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        str(miss)
+        mids = MonotonicIncreasingDynamicStack()
+        str(mids)
         :return string representation of stack:
         """
         if self.is_empty():
             return '[]'
-        output: StaticMultiTypeArray = StaticMultiTypeArray(capacity=self.length())
+        output: DynamicMultiTypeArray = DynamicMultiTypeArray()
         for i in self.stack:
             output.append(i)
         return '[' + ', '.join(f"'{item}'" if type(item) == str else str(item) for item in output) + ']'
@@ -45,8 +45,8 @@ class MonotonicIncreasingStaticStack:
         stack use amortized min_value method, so pushing will throw exception during comparison elements.
         Time complexity is O(1).
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.push(1)
+        mids = MonotonicIncreasingDynamicStack()
+        mids.push(1)
         :param x:
         :return None:
         """
@@ -68,9 +68,9 @@ class MonotonicIncreasingStaticStack:
         Raise error if stack is empty.
         Time complexity is O(1).
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.push(1)
-        miss.pop()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.push(1)
+        mids.pop()
         :return object(popped element):
         """
         return self.stack.pop()
@@ -81,9 +81,9 @@ class MonotonicIncreasingStaticStack:
         Raise error if stack is empty.
         Time complexity is O(1)
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.push(1)
-        miss.peek()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.push(1)
+        mids.peek()
         :return object(element in stack):
         """
         if self.is_empty():
@@ -97,9 +97,9 @@ class MonotonicIncreasingStaticStack:
         method will throw exception during comparison between them.
         Time complexity amortized, so its O(1).
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.push(1)
-        miss.min_value()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.push(1)
+        mids.min_value()
         :return object(element in stack):
         """
         if not self.min_value_method:
@@ -115,9 +115,9 @@ class MonotonicIncreasingStaticStack:
         method will throw exception during comparison between them.
         Time complexity amortized, so its O(1).
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.push(1)
-        miss.max_value()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.push(1)
+        mids.max_value()
         :return object(element in stack):
         """
         if not self.max_value_method:
@@ -131,8 +131,8 @@ class MonotonicIncreasingStaticStack:
         Return integer represent size(all elements store in stack) of stack.
         Time complexity amortized, so its O(1).
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.length()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.length()
         :return integer:
         """
         return self.stack.length()
@@ -141,8 +141,8 @@ class MonotonicIncreasingStaticStack:
         """
         Return True if stack is empty, otherwise return False.
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.is_empty()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.is_empty()
         :return boolean true of false:
         """
         return self.stack.is_empty()
@@ -151,10 +151,10 @@ class MonotonicIncreasingStaticStack:
         """
         Clear all data in stack.
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
+        mids = MonotonicIncreasingDynamicStack()
         for i in range(5):
-            miss.push(i)
-        miss.clear()
+            mids.push(i)
+        mids.clear()
         :return None:
         """
         self.stack.clear()
@@ -163,8 +163,8 @@ class MonotonicIncreasingStaticStack:
         """
         Returning list names of all available methods.
         Example of usages:
-        miss = MonotonicIncreasingStaticStack()
-        miss.all_methods()
+        mids = MonotonicIncreasingDynamicStack()
+        mids.all_methods()
         :return list of strings:
         """
-        return dir(MonotonicIncreasingStaticStack)
+        return dir(MonotonicIncreasingDynamicStack)
