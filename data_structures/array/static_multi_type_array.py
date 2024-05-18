@@ -15,7 +15,7 @@ class StaticMultiTypeArray:
     """
     def __init__(self, capacity: int = 10):
         if not isinstance(capacity, int):
-            raise ValueError(f"Capacity type= {capacity} should be int instance")
+            raise ValueError(f"Capacity type= {type(capacity)} should be int instance")
         if capacity < 1:
             raise ValueError(f"Capacity= {capacity} can't be less than one")
         if capacity == float('inf'):
