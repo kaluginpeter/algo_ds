@@ -7,7 +7,7 @@ class DynamicDoubleEndedQueue:
     Implementation of Dynamic Double Ended Queue.
     Under hood queue use Double Linked List.
     For more information about available methods call all_methods() method.
-    Definition of Linear Queue:
+    Definition of Linear Deque:
     Deque or Double Ended Queue is a generalized version of Queue
     data structure that allows insert and delete at both ends.
     Also, the problems where elements need to be removed and
@@ -31,6 +31,18 @@ class DynamicDoubleEndedQueue:
         """
         self.dequeue.append(x)
 
+    def push_right(self, x: any) -> None:
+        """
+        Insert given object to the front(start) of deque.
+        Time complexity is O(1).
+        Example of Usages:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.push_right(1) -> None
+        :param x object any type:
+        :return None:
+        """
+        self.push_back(x)
+
     def push_front(self, x: any) -> None:
         """
         Insert given object to the front(start) of deque.
@@ -43,9 +55,75 @@ class DynamicDoubleEndedQueue:
         """
         self.dequeue.prepend(x)
 
+    def push_left(self, x: any) -> None:
+        """
+        Insert given object to the rear(end) of deque.
+        Time complexity is O(1).
+        Example of Usages:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.push_left(1) -> None
+        :param x object any type:
+        :return None:
+        """
+        self.push_front(x)
+
+    def extend_left(self, sequence: iter) -> None:
+        """
+        Adding all elements from given sequence to the front(start/left/head) of deque.
+        Time complexity O(M) where M is length of sequence.
+        Example of usage:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.extend_left([1, 2, 3, 4, 5])
+        print(ddeq) -> 'Front'<-|5<-|4<-|3<-|2<-|1<-|'Rear'
+        :param sequence: iterable sequence
+        :return: None
+        """
+        for item in sequence:
+            self.push_front(item)
+
+    def extend_front(self, sequence: iter) -> None:
+        """
+        Adding all elements from given sequence to the front(start/left/head) of deque.
+        Time complexity O(M) where M is length of sequence.
+        Example of usage:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.extend_front([1, 2, 3, 4, 5])
+        print(ddeq) -> 'Front'<-|5<-|4<-|3<-|2<-|1<-|'Rear'
+        :param sequence: iterable sequence
+        :return: None
+        """
+        self.extend_left(sequence)
+
+    def extend_right(self, sequence: iter) -> None:
+        """
+        Adding all elements from given sequence to the back(end/right/tail) of deque.
+        Time complexity O(M) where M is length of sequence.
+        Example of usage:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.extend_right([1, 2, 3, 4, 5])
+        print(ddeq) -> 'Front'<-|1<-|2<-|3<-|4<-|5<-|'Rear'
+        :param sequence: iterable sequence
+        :return: None
+        """
+        for item in sequence:
+            self.push_back(item)
+
+    def extend_back(self, sequence: iter) -> None:
+        """
+        Adding all elements from given sequence to the back(end/right/tail) of deque.
+        Time complexity O(M) where M is length of sequence.
+        Example of usage:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.extend_back([1, 2, 3, 4, 5])
+        print(ddeq) -> 'Front'<-|1<-|2<-|3<-|4<-|5<-|'Rear'
+        :param sequence: iterable sequence
+        :return: None
+        """
+        self.extend_right(sequence)
+
     def pop_front(self) -> object:
         """
-        Delete and return object from the front(start/head) of queue.
+        Delete and return object from the front(start/head/left) of deque.
         Raise exception is deque is empty.
         Time complexity O(1).
         Example of Usages:
@@ -60,7 +138,7 @@ class DynamicDoubleEndedQueue:
 
     def pop_left(self) -> object:
         """
-        Delete and return object from the front(start/head) of queue.
+        Delete and return object from the front(start/head/left) of deque.
         Raise exception is deque is empty.
         Time complexity O(1).
         Example of Usages:
@@ -73,7 +151,7 @@ class DynamicDoubleEndedQueue:
 
     def pop_back(self) -> object:
         """
-        Delete and return object from the back(end/tail) of queue.
+        Delete and return object from the back(end/tail/right) of deque.
         Raise exception is deque is empty.
         Time complexity O(1).
         Example of Usages:
@@ -88,7 +166,7 @@ class DynamicDoubleEndedQueue:
 
     def pop_right(self) -> object:
         """
-        Delete and return object from the back(end/tail) of queue.
+        Delete and return object from the back(end/tail/right) of deque.
         Raise exception is deque is empty.
         Time complexity O(1).
         Example of Usages:
@@ -107,16 +185,29 @@ class DynamicDoubleEndedQueue:
         Example of Usages:
         ddeq = DynamicDoubleEndedQueue()
         ddeq.push_back(1) -> None
-        ddeq.peek() -> 1
+        ddeq.peek_left() -> 1
         :return:
         """
         if self.is_empty():
             raise IndexError("Can't peek from empty Deque")
         return self.dequeue.head.data
 
+    def peek_front(self) -> object:
+        """
+        Return object from the front(start/head) of deque and not delete them.
+        Raise exception if queue is empty.
+        Time complexity O(1).
+        Example of Usages:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.push_back(1) -> None
+        ddeq.peek_front() -> 1
+        :return:
+        """
+        return self.peek_left()
+
     def peek_right(self) -> object:
         """
-        Return object from the rear(end/tail) of deque and not delete them.
+        Return object from the rear(end/tail/right) of deque and not delete them.
         Raise exception if queue is empty.
         Time complexity O(1).
         Example of Usages:
@@ -128,6 +219,19 @@ class DynamicDoubleEndedQueue:
         if self.is_empty():
             raise IndexError("Can't peek from empty Deque")
         return self.dequeue.tail.data
+
+    def peek_back(self) -> object:
+        """
+        Return object from the rear(end/tail/right) of deque and not delete them.
+        Raise exception if queue is empty.
+        Time complexity O(1).
+        Example of Usages:
+        ddeq = DynamicDoubleEndedQueue()
+        ddeq.push_back(1) -> None
+        ddeq.peek_back() -> 1
+        :return:
+        """
+        return self.peek_right()
 
     def is_empty(self) -> bool:
         """
@@ -187,7 +291,7 @@ class DynamicDoubleEndedQueue:
 
     def all_methods(self) -> list[str]:
         """
-        Return list string names of all available methods in Queue.
+        Return list string names of all available methods in Deque.
         Example of Usages:
         ddeq = DynamicDoubleEndedQueue()
         ddeq.all_methods() -> list[str, str, ...]
