@@ -1,6 +1,7 @@
 def bubble_sort(sequence: iter, reverse: bool = False) -> None:
     """
     Function thats make bubble sort in given sequence.
+    Stable sort.
     Time Complexity O(N**2), but optimized(amortized) in some cases to O(N).
     Memory Complexity O(1).
     Example of Usages:
