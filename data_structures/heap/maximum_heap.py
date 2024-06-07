@@ -1,14 +1,14 @@
 from data_structures.array.dynamic_multi_type_array import DynamicMultiTypeArray
 
 
-class MinimumHeap:
+class MaximumHeap:
     """
-    Minimum Heap - A Min-Heap is defined as a type of Heap Data Structure
-    in which each node is smaller than or equal to its children.
+    Maximum Heap - A Min-Heap is defined as a type of Heap Data Structure
+    in which each node is bigger than or equal to its children.
     The heap data structure is a type of binary tree that is commonly used
     in computer science for various purposes, including sorting, searching, and organizing data.
     Example of Usages:
-    h = MinimumHeap()
+    h = MaximumHeap()
     h.all_methods() -> list[str]
     """
     def __init__(self) -> None:
@@ -20,7 +20,7 @@ class MinimumHeap:
         Push given item in heap.
         Time Complexity O(logN).
         Example of usages:
-        h = MinimumHeap()
+        h = MaximumHeap()
         h.push(1) -> None
         print(h) -> [1]
         :param item: any object than can be compared with other previous objects in heap.
@@ -30,7 +30,7 @@ class MinimumHeap:
         current_index: int = self.heap.length() - 1
         parent: int = current_index >> 1
 
-        while parent > 0 and self.heap[parent] > self.heap[current_index]:
+        while parent > 0 and self.heap[parent] < self.heap[current_index]:
             self.heap[parent], self.heap[current_index] = self.heap[current_index], self.heap[parent]
             current_index, parent = parent, parent >> 1
 
@@ -44,14 +44,14 @@ class MinimumHeap:
         while 2 * current_index < upper_bound:
             if (
                 2 * current_index + 1 < upper_bound
-                and self.heap[2 * current_index] > self.heap[2 * current_index + 1]
-                and self.heap[current_index] > self.heap[2 * current_index + 1]
+                and self.heap[2 * current_index] < self.heap[2 * current_index + 1]
+                and self.heap[current_index] < self.heap[2 * current_index + 1]
             ):
                 self.heap[current_index], self.heap[2 * current_index + 1] = (
                     self.heap[2 * current_index + 1], self.heap[current_index]
                 )
                 current_index = 2 * current_index + 1
-            elif self.heap[current_index] > self.heap[2 * current_index]:
+            elif self.heap[current_index] < self.heap[2 * current_index]:
                 self.heap[current_index], self.heap[2 * current_index] = (
                     self.heap[2 * current_index], self.heap[current_index]
                 )
@@ -63,7 +63,7 @@ class MinimumHeap:
         Return top of the heap and not delete him if heap is not empty, otherwise raise error.
         Time Complexity O(1).
         Example of Usages:
-        h = MinimumHeap()
+        h = MaximumHeap()
         h.push(0) -> None
         h.peek() -> 0
         :return: object, top of the heap.
@@ -78,7 +78,7 @@ class MinimumHeap:
         If heap is empty raise error.
         Time Complexity O(logN).
         Example of Usages:
-        h = MinimumHeap()
+        h = MaximumHeap()
         h.push(1) -> None
         h.pop() -> 1
         print(h) -> []
@@ -104,9 +104,9 @@ class MinimumHeap:
         after ".heapify(*args)" method heap will have new data from given sequence.
         Time Complexity O(N).
         Example of Usages:
-        h = MinimumHeap()
+        h = MaximumHeap()
         h.heapify([3, 2, -1, 1, 0, 4, -3]) -> None
-        print(h) -> [-3, 0, -1, 1, 2, 4, 3]
+        print(h) -> [4, 2, 3, 1, 0, -1, -3]
         :param sequence: iterable sequence with __getitem__ dunder methods
         :return: -> None
         """
@@ -124,7 +124,7 @@ class MinimumHeap:
         Return string representation of heap.
         If heap is empty return "[]".
         Example of Usages:
-        h = MinimumHeap()
+        h = MaximumHeap()
         h.push(1) -> None
         print(h) -> [1]
         :return: string representation of heap
@@ -138,8 +138,8 @@ class MinimumHeap:
         """
         Return list names(string) of all methods existing in class.
         Example of Usages:
-        h = MinimumHeap()
+        h = MaximumHeap()
         h.all_methods() -> list[str]
         :return: list of string representing name of all available methods in class.
         """
-        return dir(MinimumHeap)
+        return dir(MaximumHeap)
