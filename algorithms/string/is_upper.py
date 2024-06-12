@@ -10,8 +10,10 @@ def is_upper(string: str) -> bool:
     :param string: object of string instance.
     :return: boolean True of False.
     """
+    alphabetical_chars: bool = False
     for character in string:
         if character.isalpha():
+            alphabetical_chars = True
             if character != character.upper():
                 return False
-    return True
+    return alphabetical_chars
