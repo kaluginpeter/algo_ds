@@ -15,14 +15,26 @@ class DisjointSetUnion:
     Add a new friendship relation, i.e. a person x becomes the friend of another person y i.e adding new element to a set.
     Find whether individual x is a friend of individual y (direct or indirect friend)
     """
-    def __init__(self, n: int) -> None:
+    def __init__(self, upper_boundary: int = None, sequence: iter = None) -> None:
         """
         Function that initialize disjoint set.
-        :param n: integer representing range of nodes, starting from 0 to n(not inclusive)
+        :param upper_boundary: integer representing range of nodes, starting from 0 to n(not inclusive)
+        :param sequence: iterable sequence. Disjoint set will automatically create set with this elements.
         """
-        self.parents: list[int] = list(range(n))
-        self.ranks: list[int] = [1] * n
-        self.__connections: int = n
+        if upper_boundary:
+            self.parents: list[int] = list(range(upper_boundary))
+            self.ranks: list[int] = [1] * upper_boundary
+            self.__connections: int = upper_boundary
+        else:
+            self.positions: dict[object, int] = {}
+            index: int = 0
+            for node in sequence:
+                self.positions[node] = index
+                index += 1
+            self.parents: list[object] = list(sequence)
+            self.ranks: list[int] = [1] * len(sequence)
+            self.__connections: int = len(sequence)
+        self.range_nodes: bool = bool(upper_boundary)
 
     def union(self, x: int, y: int) -> bool:
         """
@@ -42,15 +54,15 @@ class DisjointSetUnion:
         root_y = self.find(y)
         if root_x == root_y:
             return False
-        if self.ranks[root_x] > self.ranks[root_y]:
-            self.parents[root_y] = root_x
-            self.ranks[root_x] += 1
-        elif self.ranks[root_x] < self.ranks[root_y]:
-            self.parents[root_x] = root_y
-            self.ranks[root_y] += 1
+        if self.ranks[(root_x if self.range_nodes else self.positions[root_x])] > self.ranks[(root_y if self.range_nodes else self.positions[root_y])]:
+            self.parents[(root_y if self.range_nodes else self.positions[root_y])] = root_x
+            self.ranks[(root_x if self.range_nodes else self.positions[root_x])] += 1
+        elif self.ranks[(root_x if self.range_nodes else self.positions[root_x])] < self.ranks[(root_y if self.range_nodes else self.positions[root_y])]:
+            self.parents[(root_x if self.range_nodes else self.positions[root_x])] = root_y
+            self.ranks[(root_y if self.range_nodes else self.positions[root_y])] += 1
         else:
-            self.parents[root_y] = root_x
-            self.ranks[root_x] += 1
+            self.parents[(root_y if self.range_nodes else self.positions[root_y])] = root_x
+            self.ranks[(root_x if self.range_nodes else self.positions[root_x])] += 1
         self.__connections -= 1
         return True
 
@@ -67,11 +79,11 @@ class DisjointSetUnion:
         :return: Parent of give node
         """
         root = x
-        while root != self.parents[root]:
-            root =  self.parents[root]
+        while root != self.parents[(root if self.range_nodes else self.positions[root])]:
+            root =  self.parents[(root if self.range_nodes else self.positions[root])]
         while x != root:
-            parent = self.parents[x]
-            self.parents[x] = root
+            parent = self.parents[(x if self.range_nodes else self.positions[x])]
+            self.parents[(x if self.range_nodes else self.positions[x])] = root
             x = parent
         return root
 
@@ -104,8 +116,12 @@ class DisjointSetUnion:
                       Ranks: {0: 1, 1: 1, 2: 1}
         :return: string representation of object
         """
-        parents = ', '.join(f'{node}: {parent}' for node, parent in enumerate(self.parents))
-        ranks = ', '.join(f'{node}: {rank}' for node, rank in enumerate(self.ranks))
+        if self.range_nodes:
+            parents = ', '.join(f'{node}: {parent}' for node, parent in enumerate(self.parents))
+            ranks = ', '.join(f'{node}: {rank}' for node, rank in enumerate(self.ranks))
+        else:
+            parents = ', '.join(f'{node}: {self.parents[self.positions[node]]}' for node in self.positions.keys())
+            ranks = ', '.join(f'{node}: {self.ranks[self.positions[node]]}' for node in self.positions.keys())
         return f'Parents: {{{parents}}}\nRanks: {{{ranks}}}'
 
     def __repr__(self) -> str:
